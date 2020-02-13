@@ -7,9 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9214AD4423F5881100CFBF08 /* PagingObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9214AD4323F5881100CFBF08 /* PagingObject.swift */; };
+		9214AD4723F59A9200CFBF08 /* URLSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9214AD4623F59A9200CFBF08 /* URLSession+Extension.swift */; };
+		9214AD4923F59ACE00CFBF08 /* TimeRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9214AD4823F59ACE00CFBF08 /* TimeRange.swift */; };
+		9214AD4B23F59B4C00CFBF08 /* AppleModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9214AD4A23F59B4C00CFBF08 /* AppleModels.swift */; };
+		9214AD4D23F59C5A00CFBF08 /* SpotifyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9214AD4C23F59C5A00CFBF08 /* SpotifyModels.swift */; };
+		9214AD4F23F59D5000CFBF08 /* PlaybackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9214AD4E23F59D5000CFBF08 /* PlaybackState.swift */; };
 		9242240423F5840F00CCD17B /* SociallyMusicService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 924223FA23F5840F00CCD17B /* SociallyMusicService.framework */; };
 		9242240923F5840F00CCD17B /* SociallyMusicServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9242240823F5840F00CCD17B /* SociallyMusicServiceTests.swift */; };
 		9242240B23F5840F00CCD17B /* SociallyMusicService.h in Headers */ = {isa = PBXBuildFile; fileRef = 924223FD23F5840F00CCD17B /* SociallyMusicService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9242241523F5846C00CCD17B /* SociallyMusicService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9242241423F5846C00CCD17B /* SociallyMusicService.swift */; };
+		9242241723F5847500CCD17B /* SpotifyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9242241623F5847500CCD17B /* SpotifyService.swift */; };
+		9242241923F5848C00CCD17B /* AppleMusicService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9242241823F5848C00CCD17B /* AppleMusicService.swift */; };
+		9242241B23F5853D00CCD17B /* APIServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9242241A23F5853D00CCD17B /* APIServiceError.swift */; };
+		9242241F23F5859400CCD17B /* SociallyTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9242241E23F5859400CCD17B /* SociallyTrack.swift */; };
+		9242242123F585FC00CCD17B /* SociallyPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9242242023F585FC00CCD17B /* SociallyPlaylist.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,12 +35,24 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9214AD4323F5881100CFBF08 /* PagingObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingObject.swift; sourceTree = "<group>"; };
+		9214AD4623F59A9200CFBF08 /* URLSession+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Extension.swift"; sourceTree = "<group>"; };
+		9214AD4823F59ACE00CFBF08 /* TimeRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeRange.swift; sourceTree = "<group>"; };
+		9214AD4A23F59B4C00CFBF08 /* AppleModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleModels.swift; sourceTree = "<group>"; };
+		9214AD4C23F59C5A00CFBF08 /* SpotifyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyModels.swift; sourceTree = "<group>"; };
+		9214AD4E23F59D5000CFBF08 /* PlaybackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackState.swift; sourceTree = "<group>"; };
 		924223FA23F5840F00CCD17B /* SociallyMusicService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SociallyMusicService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		924223FD23F5840F00CCD17B /* SociallyMusicService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SociallyMusicService.h; sourceTree = "<group>"; };
 		924223FE23F5840F00CCD17B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9242240323F5840F00CCD17B /* SociallyMusicServiceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SociallyMusicServiceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9242240823F5840F00CCD17B /* SociallyMusicServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SociallyMusicServiceTests.swift; sourceTree = "<group>"; };
 		9242240A23F5840F00CCD17B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9242241423F5846C00CCD17B /* SociallyMusicService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SociallyMusicService.swift; sourceTree = "<group>"; };
+		9242241623F5847500CCD17B /* SpotifyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyService.swift; sourceTree = "<group>"; };
+		9242241823F5848C00CCD17B /* AppleMusicService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusicService.swift; sourceTree = "<group>"; };
+		9242241A23F5853D00CCD17B /* APIServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceError.swift; sourceTree = "<group>"; };
+		9242241E23F5859400CCD17B /* SociallyTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SociallyTrack.swift; sourceTree = "<group>"; };
+		9242242023F585FC00CCD17B /* SociallyPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SociallyPlaylist.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +95,8 @@
 		924223FC23F5840F00CCD17B /* SociallyMusicService */ = {
 			isa = PBXGroup;
 			children = (
+				9242241D23F5856800CCD17B /* Models */,
+				9242241C23F5855100CCD17B /* Services */,
 				924223FD23F5840F00CCD17B /* SociallyMusicService.h */,
 				924223FE23F5840F00CCD17B /* Info.plist */,
 			);
@@ -84,6 +110,32 @@
 				9242240A23F5840F00CCD17B /* Info.plist */,
 			);
 			path = SociallyMusicServiceTests;
+			sourceTree = "<group>";
+		};
+		9242241C23F5855100CCD17B /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				9242241A23F5853D00CCD17B /* APIServiceError.swift */,
+				9242241823F5848C00CCD17B /* AppleMusicService.swift */,
+				9242241423F5846C00CCD17B /* SociallyMusicService.swift */,
+				9242241623F5847500CCD17B /* SpotifyService.swift */,
+				9214AD4623F59A9200CFBF08 /* URLSession+Extension.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		9242241D23F5856800CCD17B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9214AD4A23F59B4C00CFBF08 /* AppleModels.swift */,
+				9214AD4323F5881100CFBF08 /* PagingObject.swift */,
+				9214AD4E23F59D5000CFBF08 /* PlaybackState.swift */,
+				9242241E23F5859400CCD17B /* SociallyTrack.swift */,
+				9242242023F585FC00CCD17B /* SociallyPlaylist.swift */,
+				9214AD4C23F59C5A00CFBF08 /* SpotifyModels.swift */,
+				9214AD4823F59ACE00CFBF08 /* TimeRange.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,6 +200,7 @@
 				TargetAttributes = {
 					924223F923F5840F00CCD17B = {
 						CreatedOnToolsVersion = 11.3.1;
+						LastSwiftMigration = 1130;
 					};
 					9242240223F5840F00CCD17B = {
 						CreatedOnToolsVersion = 11.3.1;
@@ -195,6 +248,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9214AD4423F5881100CFBF08 /* PagingObject.swift in Sources */,
+				9214AD4D23F59C5A00CFBF08 /* SpotifyModels.swift in Sources */,
+				9242241723F5847500CCD17B /* SpotifyService.swift in Sources */,
+				9242241B23F5853D00CCD17B /* APIServiceError.swift in Sources */,
+				9242241523F5846C00CCD17B /* SociallyMusicService.swift in Sources */,
+				9214AD4723F59A9200CFBF08 /* URLSession+Extension.swift in Sources */,
+				9214AD4F23F59D5000CFBF08 /* PlaybackState.swift in Sources */,
+				9242241F23F5859400CCD17B /* SociallyTrack.swift in Sources */,
+				9214AD4B23F59B4C00CFBF08 /* AppleModels.swift in Sources */,
+				9214AD4923F59ACE00CFBF08 /* TimeRange.swift in Sources */,
+				9242241923F5848C00CCD17B /* AppleMusicService.swift in Sources */,
+				9242242123F585FC00CCD17B /* SociallyPlaylist.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,6 +405,7 @@
 		9242240F23F5840F00CCD17B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = RHQR56U62Z;
@@ -348,6 +414,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = SociallyMusicService/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -356,6 +423,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.onedgeinnovation.SociallyMusicService;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -364,6 +433,7 @@
 		9242241023F5840F00CCD17B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = RHQR56U62Z;
@@ -372,6 +442,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = SociallyMusicService/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -380,6 +451,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.onedgeinnovation.SociallyMusicService;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -388,6 +460,7 @@
 		9242241223F5840F00CCD17B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RHQR56U62Z;
 				INFOPLIST_FILE = SociallyMusicServiceTests/Info.plist;
@@ -406,6 +479,7 @@
 		9242241323F5840F00CCD17B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = RHQR56U62Z;
 				INFOPLIST_FILE = SociallyMusicServiceTests/Info.plist;
