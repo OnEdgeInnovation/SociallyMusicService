@@ -15,3 +15,21 @@
    <img src="https://img.shields.io/badge/contributions-Welcome-brightgreen.svg?style=flat"
         alt="Contributions Welcome">
 </a>
+
+## Description
+
+
+## Usage
+
+
+## Initial Setup
+
+
+## Spotify Notes
+
+
+## Apple Music Notes
+
+
+## License
+SociallyMusicService is released under the MIT License.
