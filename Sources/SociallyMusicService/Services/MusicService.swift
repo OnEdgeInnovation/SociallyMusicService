@@ -10,6 +10,8 @@ import Foundation
 
 public class MusicService {
     
+    private let urlSession = URLSession.shared
+    
     private let jsonDecoder: JSONDecoder = {
         let jsonDecoder = JSONDecoder()
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -18,7 +20,7 @@ public class MusicService {
     
     func fetchResources<T: Decodable>(request: URLRequest, completion: @escaping (Result<T, APIServiceError>) -> Void) {
         //Make call
-        self.urlSession.dataTask(with: request) { (result: Result<(URLResponse, Data), Error> ) in
+        urlSession.dataTask(with: request) { (result: Result<(URLResponse, Data), Error> ) in
             switch result {
             case .success(let (response, data)):
                 guard let statusCode = (response as? HTTPURLResponse)?.statusCode, 200..<299 ~= statusCode else {
@@ -45,7 +47,7 @@ public class MusicService {
         newRequest.setValue("application/json", forHTTPHeaderField: "Accept")
         newRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         //Perform call
-        self.urlSession.dataTask(with: newRequest) { data, response, error in
+        urlSession.dataTask(with: newRequest) { data, response, error in
             if error != nil || data == nil {
                 result(.failure(.apiError))
                 return

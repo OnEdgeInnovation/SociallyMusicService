@@ -88,12 +88,12 @@
 		9214AD7823F623B600CFBF08 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				9214AD7923F623B600CFBF08 /* SpotifyModels.swift */,
-				9214AD7A23F623B600CFBF08 /* SociallyPlaylist.swift */,
 				9214AD7B23F623B600CFBF08 /* AppleModels.swift */,
-				9214AD7C23F623B600CFBF08 /* SociallyTrack.swift */,
 				9214AD7D23F623B600CFBF08 /* PagingObject.swift */,
 				9214AD7E23F623B600CFBF08 /* PlaybackState.swift */,
+				9214AD7A23F623B600CFBF08 /* SociallyPlaylist.swift */,
+				9214AD7C23F623B600CFBF08 /* SociallyTrack.swift */,
+				9214AD7923F623B600CFBF08 /* SpotifyModels.swift */,
 				9214AD7F23F623B600CFBF08 /* TimeRange.swift */,
 			);
 			path = Models;
@@ -347,6 +347,7 @@
 		OBJ_27 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/SociallyMusicService/Info.plist";
 				LD = /usr/bin/true;
 				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -package-description-version 5.1";
 				SWIFT_VERSION = 5.0;
@@ -356,6 +357,7 @@
 		OBJ_28 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/SociallyMusicService/Info.plist";
 				LD = /usr/bin/true;
 				OTHER_SWIFT_FLAGS = "-swift-version 5 -I $(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2 -target x86_64-apple-macosx10.10 -sdk /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -package-description-version 5.1";
 				SWIFT_VERSION = 5.0;

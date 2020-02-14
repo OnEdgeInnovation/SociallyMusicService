@@ -11,7 +11,6 @@ import Foundation
 public class SpotifyService: MusicService {
     
     public static let shared = SpotifyService()
-    private let urlSession = URLSession.shared
     private let baseURL = URL(string: "https://api.spotify.com/v1/")!
     
     var token = ""
@@ -71,7 +70,7 @@ public class SpotifyService: MusicService {
             result(.failure(.invalidCompiledURL))
             return
         }
-        let urlreq = URLRequest(url: finURL)
+        var urlreq = URLRequest(url: finURL)
         fetchResources(request: urlreq, completion: result)
         
     }
@@ -90,7 +89,7 @@ public class SpotifyService: MusicService {
             result(.failure(.invalidCompiledURL))
             return
         }
-        let urlreq = URLRequest(url: finURL)
+        var urlreq = URLRequest(url: finURL)
         urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         fetchResources(request: urlreq, completion: result)
     }
@@ -107,7 +106,7 @@ public class SpotifyService: MusicService {
             result(.failure(.invalidCompiledURL))
             return
         }
-        let urlreq = URLRequest(url: finURL)
+        var urlreq = URLRequest(url: finURL)
         urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         fetchResources(request: urlreq, completion: result)
     }
@@ -115,7 +114,7 @@ public class SpotifyService: MusicService {
     public func fetchCurrentUser(completion: @escaping (String) -> Void) {
         //Get proper URL
         let url = baseURL.appendingPathComponent("me")
-        let request = URLRequest(url: url)
+        var request = URLRequest(url: url)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         //Make the call
         fetchResources(request: request) { (result: Result<UserResult, APIServiceError>) in
@@ -131,7 +130,7 @@ public class SpotifyService: MusicService {
     public func fetchCurrentTrack(completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
         //Get proper URL
         let url = baseURL.appendingPathComponent("me/player/currently-playing")
-        let request = URLRequest(url: url)
+        var request = URLRequest(url: url)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         //Make the call
         fetchResources(request: request) { (result: Result<TrackResult, APIServiceError>) in
@@ -187,7 +186,7 @@ public class SpotifyService: MusicService {
             result(.failure(.invalidCompiledURL))
             return
         }
-        let urlreq = URLRequest(url: finURL)
+        var urlreq = URLRequest(url: finURL)
         urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         fetchResources(request: urlreq, completion: result)
     }
@@ -231,7 +230,7 @@ public class SpotifyService: MusicService {
             result(.failure(.invalidCompiledURL))
             return
         }
-        let urlreq = URLRequest(url: finURL)
+        var urlreq = URLRequest(url: finURL)
         urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         fetchResources(request: urlreq, completion: result)
     }
@@ -276,7 +275,7 @@ public class SpotifyService: MusicService {
             result(.failure(APIServiceError.invalidCompiledURL))
             return
         }
-        let urlreq = URLRequest(url: finURL)
+        var urlreq = URLRequest(url: finURL)
         urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         fetchResources(request: urlreq, completion: result)
     }

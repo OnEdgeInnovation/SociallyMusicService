@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct PagingObject<T: Codable>: Codable {
+public struct PagingObject<T: Codable>: Codable {
     
     let href: String
     var items: [T]
@@ -34,6 +34,6 @@ struct PagingObject<T: Codable>: Codable {
     }
 }
 
-struct TrackPagingObject<T: Codable>: Codable {
+public struct TrackPagingObject<T: Codable>: Codable {
     let tracks: PagingObject<T>
 }

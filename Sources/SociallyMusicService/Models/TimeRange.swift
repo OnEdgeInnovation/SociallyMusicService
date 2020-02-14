@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum TimeRange: String {
+public enum TimeRange: String {
     case shortTerm = "short_term"
     case mediumTerm = "medium_term"
     case longTerm = "long_term"

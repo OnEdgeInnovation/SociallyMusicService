@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct SociallyPlaylist: Codable {
+public struct SociallyPlaylist: Codable {
     
     let playlistUri: String
     let playlistId: String

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct SociallyTrack: Codable {
+public struct SociallyTrack: Codable {
     
     init(album: String, artist: String, name: String, isrc: String, context: String, imageURL: String) {
         self.album = album

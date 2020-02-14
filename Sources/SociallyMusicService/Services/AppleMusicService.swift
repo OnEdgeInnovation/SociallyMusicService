@@ -11,17 +11,10 @@ import Foundation
 public class AppleMusicService: MusicService {
     
     public static let shared = AppleMusicService()
-    private let urlSession = URLSession.shared
     private let baseURL = URL(string: "https://api.music.apple.com/v1/")!
     
     private var appleToken = ""
     private var devToken = ""
-    
-    private let jsonDecoder: JSONDecoder = {
-        let jsonDecoder = JSONDecoder()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-        return jsonDecoder
-    }()
     
     public func searchByISRC(isrc: String, completion: @escaping (String) -> Void) {
         let countryCode = "us"
