@@ -25,6 +25,6 @@ let package = Package(
         .testTarget(
             name: "SociallyMusicServiceTests",
             dependencies: ["SociallyMusicService"],
-            path: "Tests")),
+            path: "Tests"),
     ]
 )
