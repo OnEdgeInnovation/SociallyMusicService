@@ -6,6 +6,8 @@
 //  Copyright © 2020 Zach McGuckin. All rights reserved.
 //
 
+import Foundation
+
 extension URLSession {
     func dataTask(with request: URLRequest, result: @escaping (Result<(URLResponse, Data), Error>) -> Void) -> URLSessionDataTask {
         return dataTask(with: request) { (data, response, error) in

@@ -6,6 +6,8 @@
 //  Copyright © 2020 Zach McGuckin. All rights reserved.
 //
 
+import Foundation
+
 class SpotifyService {
     
     public static let shared = SpotifyService()

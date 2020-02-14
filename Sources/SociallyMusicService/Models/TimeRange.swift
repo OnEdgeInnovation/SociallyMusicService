@@ -6,6 +6,8 @@
 //  Copyright © 2020 Zach McGuckin. All rights reserved.
 //
 
+import Foundation
+
 enum TimeRange: String {
     case shortTerm = "short_term"
     case mediumTerm = "medium_term"

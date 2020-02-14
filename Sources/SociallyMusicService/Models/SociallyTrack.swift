@@ -6,6 +6,8 @@
 //  Copyright © 2020 Zach McGuckin. All rights reserved.
 //
 
+import Foundation
+
 struct SociallyTrack: Codable {
     
     init(album: String, artist: String, name: String, isrc: String, context: String, imageURL: String) {

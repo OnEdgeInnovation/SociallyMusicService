@@ -6,6 +6,8 @@
 //  Copyright © 2020 Zach McGuckin. All rights reserved.
 //
 
+import Foundation
+
 public struct ResponseRoot<T: Codable>: Codable {
     let data: [T]?
 }
