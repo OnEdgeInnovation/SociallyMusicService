@@ -21,7 +21,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		OBJ_23 /* SociallyMusicService.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* SociallyMusicService.swift */; };
 		OBJ_30 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_6 /* Package.swift */; };
 		OBJ_41 /* SociallyMusicServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* SociallyMusicServiceTests.swift */; };
 		OBJ_43 /* SociallyMusicService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SociallyMusicService::SociallyMusicService::Product" /* SociallyMusicService.framework */; };
@@ -63,9 +62,8 @@
 		OBJ_13 /* SociallyMusicServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SociallyMusicServiceTests.swift; sourceTree = "<group>"; };
 		OBJ_17 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		OBJ_6 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		OBJ_9 /* SociallyMusicService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SociallyMusicService.swift; sourceTree = "<group>"; };
 		"SociallyMusicService::SociallyMusicService::Product" /* SociallyMusicService.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SociallyMusicService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		"SociallyMusicService::SociallyMusicServiceTests::Product" /* SociallyMusicServiceTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = SociallyMusicServiceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		"SociallyMusicService::SociallyMusicServiceTests::Product" /* SociallyMusicServiceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = SociallyMusicServiceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,7 +163,6 @@
 			children = (
 				9214AD7823F623B600CFBF08 /* Models */,
 				9214AD8123F623BE00CFBF08 /* Services */,
-				OBJ_9 /* SociallyMusicService.swift */,
 				9214AD8023F623BB00CFBF08 /* SociallyMusicService.h */,
 				9214AD7723F623B300CFBF08 /* Info.plist */,
 			);
@@ -257,7 +254,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_23 /* SociallyMusicService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
