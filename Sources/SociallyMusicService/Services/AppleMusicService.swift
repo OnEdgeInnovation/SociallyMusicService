@@ -7,8 +7,6 @@
 //
 
 import Foundation
-import MediaPlayer
-import StoreKit
 
 class AppleMusicService {
     
@@ -95,11 +93,6 @@ class AppleMusicService {
     }
     
     public func playSong(context: String, result: @escaping (Bool) -> Void) {
-        let storeIds: [String] = [context]
-        let player = MPMusicPlayerController.systemMusicPlayer
-        let queue  = MPMusicPlayerStoreQueueDescriptor(storeIDs: storeIds)
-        player.setQueue(with: queue)
-        player.play()
         result(true)
     }
     
