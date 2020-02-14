@@ -19,7 +19,7 @@
 ## Installation
 SociallyMusicService has been configured to work with Swift Package Manager.
 In order to add this framework as a dependency: 
-- Open your project in Xcode 11.0>
+- Open your project in Xcode 11.0>=
 - Click File>Swift Packages>Add Package Dependency
 - Then put in the URL of this repo: https://github.com/OnEdgeInnovation/SociallyMusicService.git
 - Confire the versioning as master. Master branch will be the working/tested copy of this repo
