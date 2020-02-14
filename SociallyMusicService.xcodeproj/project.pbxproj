@@ -56,7 +56,7 @@
 		9214AD8223F623BE00CFBF08 /* APIServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceError.swift; sourceTree = "<group>"; };
 		9214AD8323F623BE00CFBF08 /* URLSession+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Extension.swift"; sourceTree = "<group>"; };
 		9214AD8423F623BE00CFBF08 /* SpotifyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyService.swift; sourceTree = "<group>"; };
-		9214AD8523F623BE00CFBF08 /* SociallyMusicService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SociallyMusicService.swift; sourceTree = "<group>"; };
+		9214AD8523F623BE00CFBF08 /* MusicService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicService.swift; sourceTree = "<group>"; };
 		9214AD8623F623BE00CFBF08 /* AppleMusicService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusicService.swift; sourceTree = "<group>"; };
 		OBJ_12 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		OBJ_13 /* SociallyMusicServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SociallyMusicServiceTests.swift; sourceTree = "<group>"; };
@@ -105,7 +105,7 @@
 				9214AD8223F623BE00CFBF08 /* APIServiceError.swift */,
 				9214AD8323F623BE00CFBF08 /* URLSession+Extension.swift */,
 				9214AD8423F623BE00CFBF08 /* SpotifyService.swift */,
-				9214AD8523F623BE00CFBF08 /* SociallyMusicService.swift */,
+				9214AD8523F623BE00CFBF08 /* MusicService.swift */,
 				9214AD8623F623BE00CFBF08 /* AppleMusicService.swift */,
 			);
 			path = Services;
@@ -138,7 +138,7 @@
 			name = Products;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -147,7 +147,6 @@
 				OBJ_14 /* Products */,
 				OBJ_17 /* README.md */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_7 /* Sources */ = {
@@ -236,7 +235,7 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_14 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";

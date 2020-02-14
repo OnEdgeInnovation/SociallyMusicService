@@ -8,7 +8,7 @@
 
 import Foundation
 
-class AppleMusicService {
+public class AppleMusicService: MusicService {
     
     public static let shared = AppleMusicService()
     private let urlSession = URLSession.shared
@@ -22,48 +22,6 @@ class AppleMusicService {
         jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
         return jsonDecoder
     }()
-    
-    private func fetchResources<T: Decodable>(request: URLRequest, completion: @escaping (Result<T, APIServiceError>) -> Void) {
-        //Make call
-        self.urlSession.dataTask(with: request) { (result: Result<(URLResponse, Data), Error> ) in
-            switch result {
-            case .success(let (response, data)):
-                guard let statusCode = (response as? HTTPURLResponse)?.statusCode, 200..<299 ~= statusCode else {
-                    print(response)
-                    completion(.failure(.invalidResponse))
-                    return
-                }
-                do {
-                    let values = try self.jsonDecoder.decode(T.self, from: data)
-                    completion(.success(values))
-                } catch let error {
-                    print(error)
-                    completion(.failure(.decodeError))
-                }
-            case .failure:
-                completion(.failure(.apiError))
-            }
-        }.resume()
-    }
-    
-    private func sendRequestNoPayload(request: URLRequest, result: @escaping (Result<Bool, APIServiceError>) -> Void) {
-        var newRequest = request
-        //Add headers
-        newRequest.setValue("application/json", forHTTPHeaderField: "Accept")
-        newRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        //Perform call
-        self.urlSession.dataTask(with: newRequest) { data, response, error in
-            if error != nil || data == nil {
-                result(.failure(.apiError))
-                return
-            }
-            guard let response = response as? HTTPURLResponse, (204 == response.statusCode || 200 == response.statusCode) else {
-                result(.failure(.invalidResponse))
-                return
-            }
-            result(.success(true))
-        }.resume()
-    }
     
     public func searchByISRC(isrc: String, completion: @escaping (String) -> Void) {
         let countryCode = "us"

@@ -8,67 +8,13 @@
 
 import Foundation
 
-class SpotifyService {
+public class SpotifyService: MusicService {
     
     public static let shared = SpotifyService()
     private let urlSession = URLSession.shared
     private let baseURL = URL(string: "https://api.spotify.com/v1/")!
     
     var token = ""
-    
-    private let jsonDecoder: JSONDecoder = {
-        let jsonDecoder = JSONDecoder()
-        jsonDecoder.keyDecodingStrategy = .convertFromSnakeCase
-        return jsonDecoder
-    }()
-    
-    private func fetchResources<T: Decodable>(request: URLRequest, completion: @escaping (Result<T, APIServiceError>) -> Void) {
-        var newRequest = request
-        //Add headers
-        newRequest.setValue("application/json", forHTTPHeaderField: "Accept")
-        newRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        newRequest.setValue("Bearer " + token, forHTTPHeaderField: "Authorization")
-        //Make call
-        self.urlSession.dataTask(with: newRequest) { (result: Result<(URLResponse, Data), Error> ) in
-            switch result {
-            case .success(let (response, data)):
-                guard let statusCode = (response as? HTTPURLResponse)?.statusCode, 200..<299 ~= statusCode else {
-                    print(response)
-                    completion(.failure(.invalidResponse))
-                    return
-                }
-                do {
-                    let values = try self.jsonDecoder.decode(T.self, from: data)
-                    completion(.success(values))
-                } catch let error {
-                    print(error)
-                    completion(.failure(.decodeError))
-                }
-            case .failure:
-                completion(.failure(.apiError))
-            }
-        }.resume()
-    }
-    
-    private func sendRequestNoPayload(request: URLRequest, result: @escaping (Result<Bool, APIServiceError>) -> Void) {
-        var newRequest = request
-        //Add headers
-        newRequest.setValue("application/json", forHTTPHeaderField: "Accept")
-        newRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        newRequest.setValue("Bearer " + token, forHTTPHeaderField: "Authorization")
-        //Perform call
-        self.urlSession.dataTask(with: newRequest) { data, response, error in
-            if error != nil || data == nil {
-                result(.failure(.apiError))
-                return
-            }
-            guard let response = response as? HTTPURLResponse, (204 == response.statusCode || 200 == response.statusCode) else {
-                result(.failure(.invalidResponse))
-                return
-            }
-            result(.success(true))
-        }.resume()
-    }
     
     public func searchByISRC(isrc: String, completion: @escaping (String) -> Void) {
         var component = URLComponents(string: baseURL.appendingPathComponent("search").absoluteString)
@@ -82,7 +28,6 @@ class SpotifyService {
 
         var request = URLRequest(url: url)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        
         fetchResources(request: request) { (result: Result<TrackPagingObject<TrackItem>, APIServiceError>) in
             switch result {
             case .success(let pagingObj):
@@ -108,6 +53,7 @@ class SpotifyService {
         
         var urlreq = URLRequest(url: finURL)
         urlreq.httpMethod = "POST"
+        urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         fetchResources(request: urlreq, completion: result)
     }
     
@@ -145,6 +91,7 @@ class SpotifyService {
             return
         }
         let urlreq = URLRequest(url: finURL)
+        urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         fetchResources(request: urlreq, completion: result)
     }
     
@@ -161,6 +108,7 @@ class SpotifyService {
             return
         }
         let urlreq = URLRequest(url: finURL)
+        urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         fetchResources(request: urlreq, completion: result)
     }
     
@@ -168,6 +116,7 @@ class SpotifyService {
         //Get proper URL
         let url = baseURL.appendingPathComponent("me")
         let request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         //Make the call
         fetchResources(request: request) { (result: Result<UserResult, APIServiceError>) in
             switch result {
@@ -183,6 +132,7 @@ class SpotifyService {
         //Get proper URL
         let url = baseURL.appendingPathComponent("me/player/currently-playing")
         let request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         //Make the call
         fetchResources(request: request) { (result: Result<TrackResult, APIServiceError>) in
             switch result {
@@ -199,6 +149,7 @@ class SpotifyService {
         //Get proper URL
         let url = baseURL.appendingPathComponent("me/player/"+action.rawValue)
         var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         switch action {
         case .play, .pause :
             request.httpMethod = "PUT"
@@ -215,7 +166,9 @@ class SpotifyService {
     
     func getUserPlaylists(of userId: String? = nil, limit: Int = 50, offset: Int = 0, url: URL? = nil, result: @escaping (Result<PagingObject<Playlist>, APIServiceError>) -> Void) {
         if let url = url {
-            fetchResources(request: URLRequest(url: url), completion: result)
+            var request = URLRequest(url: url)
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            fetchResources(request: request, completion: result)
             return
         }
         let params: [URLQueryItem] = [
@@ -235,6 +188,7 @@ class SpotifyService {
             return
         }
         let urlreq = URLRequest(url: finURL)
+        urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         fetchResources(request: urlreq, completion: result)
     }
     
@@ -278,6 +232,7 @@ class SpotifyService {
             return
         }
         let urlreq = URLRequest(url: finURL)
+        urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         fetchResources(request: urlreq, completion: result)
     }
     
@@ -322,6 +277,7 @@ class SpotifyService {
             return
         }
         let urlreq = URLRequest(url: finURL)
+        urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         fetchResources(request: urlreq, completion: result)
     }
 }
