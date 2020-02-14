@@ -8,7 +8,7 @@
 
 import Foundation
 
-class SociallyMusicService {
+public class SociallyMusicService {
     
     public static let shared = SociallyMusicService()
     
@@ -118,7 +118,7 @@ class SociallyMusicService {
         }
     }
     
-    func getCurrUserPlaylists(limit: Int = 50, offset: Int = 0, url: URL? = nil, result: @escaping (Result<PagingObject<Playlist>, APIServiceError>) -> Void) {
+    public func getUserPlaylists(limit: Int = 50, offset: Int = 0, url: URL? = nil, result: @escaping (Result<PagingObject<Playlist>, APIServiceError>) -> Void) {
         if isAppleUser {
             fatalError("Please use getAll playlists function, as apple doesn't allow grabbing other users playlists.")
         } else {
@@ -126,7 +126,7 @@ class SociallyMusicService {
         }
     }
     
-    func getAllPlaylists(of userId: String, result: @escaping (Result<[SociallyPlaylist], APIServiceError>) -> Void) {
+    public func getAllPlaylists(of userId: String, result: @escaping (Result<[SociallyPlaylist], APIServiceError>) -> Void) {
         if isAppleUser {
             AppleMusicService.shared.getAllPlaylists(completion: result)
         } else {
@@ -142,7 +142,7 @@ class SociallyMusicService {
         }
     }
     
-    func deleteFromPlaylist(_ playlistId: String, trackId: String, result: @escaping (Result<[String: String], APIServiceError>) -> Void = { _ in }) {
+    public func deleteFromPlaylist(_ playlistId: String, trackId: String, result: @escaping (Result<[String: String], APIServiceError>) -> Void = { _ in }) {
         if isAppleUser {
             // not supported by apple
         } else {
