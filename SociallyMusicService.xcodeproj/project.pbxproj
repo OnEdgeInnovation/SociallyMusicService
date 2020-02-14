@@ -1,531 +1,568 @@
 // !$*UTF8*$!
 {
-	archiveVersion = 1;
-	classes = {
-	};
-	objectVersion = 50;
-	objects = {
-
-/* Begin PBXBuildFile section */
-		9214AD4423F5881100CFBF08 /* PagingObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9214AD4323F5881100CFBF08 /* PagingObject.swift */; };
-		9214AD4723F59A9200CFBF08 /* URLSession+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9214AD4623F59A9200CFBF08 /* URLSession+Extension.swift */; };
-		9214AD4923F59ACE00CFBF08 /* TimeRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9214AD4823F59ACE00CFBF08 /* TimeRange.swift */; };
-		9214AD4B23F59B4C00CFBF08 /* AppleModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9214AD4A23F59B4C00CFBF08 /* AppleModels.swift */; };
-		9214AD4D23F59C5A00CFBF08 /* SpotifyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9214AD4C23F59C5A00CFBF08 /* SpotifyModels.swift */; };
-		9214AD4F23F59D5000CFBF08 /* PlaybackState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9214AD4E23F59D5000CFBF08 /* PlaybackState.swift */; };
-		9242240423F5840F00CCD17B /* SociallyMusicService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 924223FA23F5840F00CCD17B /* SociallyMusicService.framework */; };
-		9242240923F5840F00CCD17B /* SociallyMusicServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9242240823F5840F00CCD17B /* SociallyMusicServiceTests.swift */; };
-		9242240B23F5840F00CCD17B /* SociallyMusicService.h in Headers */ = {isa = PBXBuildFile; fileRef = 924223FD23F5840F00CCD17B /* SociallyMusicService.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9242241523F5846C00CCD17B /* SociallyMusicService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9242241423F5846C00CCD17B /* SociallyMusicService.swift */; };
-		9242241723F5847500CCD17B /* SpotifyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9242241623F5847500CCD17B /* SpotifyService.swift */; };
-		9242241923F5848C00CCD17B /* AppleMusicService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9242241823F5848C00CCD17B /* AppleMusicService.swift */; };
-		9242241B23F5853D00CCD17B /* APIServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9242241A23F5853D00CCD17B /* APIServiceError.swift */; };
-		9242241F23F5859400CCD17B /* SociallyTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9242241E23F5859400CCD17B /* SociallyTrack.swift */; };
-		9242242123F585FC00CCD17B /* SociallyPlaylist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9242242023F585FC00CCD17B /* SociallyPlaylist.swift */; };
-/* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		9242240523F5840F00CCD17B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 924223F123F5840F00CCD17B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 924223F923F5840F00CCD17B;
-			remoteInfo = SociallyMusicService;
-		};
-/* End PBXContainerItemProxy section */
-
-/* Begin PBXFileReference section */
-		9214AD4323F5881100CFBF08 /* PagingObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingObject.swift; sourceTree = "<group>"; };
-		9214AD4623F59A9200CFBF08 /* URLSession+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Extension.swift"; sourceTree = "<group>"; };
-		9214AD4823F59ACE00CFBF08 /* TimeRange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeRange.swift; sourceTree = "<group>"; };
-		9214AD4A23F59B4C00CFBF08 /* AppleModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleModels.swift; sourceTree = "<group>"; };
-		9214AD4C23F59C5A00CFBF08 /* SpotifyModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyModels.swift; sourceTree = "<group>"; };
-		9214AD4E23F59D5000CFBF08 /* PlaybackState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackState.swift; sourceTree = "<group>"; };
-		924223FA23F5840F00CCD17B /* SociallyMusicService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SociallyMusicService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		924223FD23F5840F00CCD17B /* SociallyMusicService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SociallyMusicService.h; sourceTree = "<group>"; };
-		924223FE23F5840F00CCD17B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9242240323F5840F00CCD17B /* SociallyMusicServiceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SociallyMusicServiceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9242240823F5840F00CCD17B /* SociallyMusicServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SociallyMusicServiceTests.swift; sourceTree = "<group>"; };
-		9242240A23F5840F00CCD17B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9242241423F5846C00CCD17B /* SociallyMusicService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SociallyMusicService.swift; sourceTree = "<group>"; };
-		9242241623F5847500CCD17B /* SpotifyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyService.swift; sourceTree = "<group>"; };
-		9242241823F5848C00CCD17B /* AppleMusicService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleMusicService.swift; sourceTree = "<group>"; };
-		9242241A23F5853D00CCD17B /* APIServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceError.swift; sourceTree = "<group>"; };
-		9242241E23F5859400CCD17B /* SociallyTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SociallyTrack.swift; sourceTree = "<group>"; };
-		9242242023F585FC00CCD17B /* SociallyPlaylist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SociallyPlaylist.swift; sourceTree = "<group>"; };
-/* End PBXFileReference section */
-
-/* Begin PBXFrameworksBuildPhase section */
-		924223F723F5840F00CCD17B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9242240023F5840F00CCD17B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9242240423F5840F00CCD17B /* SociallyMusicService.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXFrameworksBuildPhase section */
-
-/* Begin PBXGroup section */
-		924223F023F5840F00CCD17B = {
-			isa = PBXGroup;
-			children = (
-				924223FC23F5840F00CCD17B /* SociallyMusicService */,
-				9242240723F5840F00CCD17B /* SociallyMusicServiceTests */,
-				924223FB23F5840F00CCD17B /* Products */,
-			);
-			sourceTree = "<group>";
-		};
-		924223FB23F5840F00CCD17B /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				924223FA23F5840F00CCD17B /* SociallyMusicService.framework */,
-				9242240323F5840F00CCD17B /* SociallyMusicServiceTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		924223FC23F5840F00CCD17B /* SociallyMusicService */ = {
-			isa = PBXGroup;
-			children = (
-				9242241D23F5856800CCD17B /* Models */,
-				9242241C23F5855100CCD17B /* Services */,
-				924223FD23F5840F00CCD17B /* SociallyMusicService.h */,
-				924223FE23F5840F00CCD17B /* Info.plist */,
-			);
-			path = SociallyMusicService;
-			sourceTree = "<group>";
-		};
-		9242240723F5840F00CCD17B /* SociallyMusicServiceTests */ = {
-			isa = PBXGroup;
-			children = (
-				9242240823F5840F00CCD17B /* SociallyMusicServiceTests.swift */,
-				9242240A23F5840F00CCD17B /* Info.plist */,
-			);
-			path = SociallyMusicServiceTests;
-			sourceTree = "<group>";
-		};
-		9242241C23F5855100CCD17B /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				9242241A23F5853D00CCD17B /* APIServiceError.swift */,
-				9242241823F5848C00CCD17B /* AppleMusicService.swift */,
-				9242241423F5846C00CCD17B /* SociallyMusicService.swift */,
-				9242241623F5847500CCD17B /* SpotifyService.swift */,
-				9214AD4623F59A9200CFBF08 /* URLSession+Extension.swift */,
-			);
-			path = Services;
-			sourceTree = "<group>";
-		};
-		9242241D23F5856800CCD17B /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				9214AD4A23F59B4C00CFBF08 /* AppleModels.swift */,
-				9214AD4323F5881100CFBF08 /* PagingObject.swift */,
-				9214AD4E23F59D5000CFBF08 /* PlaybackState.swift */,
-				9242241E23F5859400CCD17B /* SociallyTrack.swift */,
-				9242242023F585FC00CCD17B /* SociallyPlaylist.swift */,
-				9214AD4C23F59C5A00CFBF08 /* SpotifyModels.swift */,
-				9214AD4823F59ACE00CFBF08 /* TimeRange.swift */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-/* End PBXGroup section */
-
-/* Begin PBXHeadersBuildPhase section */
-		924223F523F5840F00CCD17B /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9242240B23F5840F00CCD17B /* SociallyMusicService.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
-/* Begin PBXNativeTarget section */
-		924223F923F5840F00CCD17B /* SociallyMusicService */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9242240E23F5840F00CCD17B /* Build configuration list for PBXNativeTarget "SociallyMusicService" */;
-			buildPhases = (
-				924223F523F5840F00CCD17B /* Headers */,
-				924223F623F5840F00CCD17B /* Sources */,
-				924223F723F5840F00CCD17B /* Frameworks */,
-				924223F823F5840F00CCD17B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = SociallyMusicService;
-			productName = SociallyMusicService;
-			productReference = 924223FA23F5840F00CCD17B /* SociallyMusicService.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		9242240223F5840F00CCD17B /* SociallyMusicServiceTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9242241123F5840F00CCD17B /* Build configuration list for PBXNativeTarget "SociallyMusicServiceTests" */;
-			buildPhases = (
-				924223FF23F5840F00CCD17B /* Sources */,
-				9242240023F5840F00CCD17B /* Frameworks */,
-				9242240123F5840F00CCD17B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				9242240623F5840F00CCD17B /* PBXTargetDependency */,
-			);
-			name = SociallyMusicServiceTests;
-			productName = SociallyMusicServiceTests;
-			productReference = 9242240323F5840F00CCD17B /* SociallyMusicServiceTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-/* End PBXNativeTarget section */
-
-/* Begin PBXProject section */
-		924223F123F5840F00CCD17B /* Project object */ = {
-			isa = PBXProject;
-			attributes = {
-				LastSwiftUpdateCheck = 1130;
-				LastUpgradeCheck = 1130;
-				ORGANIZATIONNAME = "Zach McGuckin";
-				TargetAttributes = {
-					924223F923F5840F00CCD17B = {
-						CreatedOnToolsVersion = 11.3.1;
-						LastSwiftMigration = 1130;
-					};
-					9242240223F5840F00CCD17B = {
-						CreatedOnToolsVersion = 11.3.1;
-					};
-				};
-			};
-			buildConfigurationList = 924223F423F5840F00CCD17B /* Build configuration list for PBXProject "SociallyMusicService" */;
-			compatibilityVersion = "Xcode 9.3";
-			developmentRegion = en;
-			hasScannedForEncodings = 0;
-			knownRegions = (
-				en,
-				Base,
-			);
-			mainGroup = 924223F023F5840F00CCD17B;
-			productRefGroup = 924223FB23F5840F00CCD17B /* Products */;
-			projectDirPath = "";
-			projectRoot = "";
-			targets = (
-				924223F923F5840F00CCD17B /* SociallyMusicService */,
-				9242240223F5840F00CCD17B /* SociallyMusicServiceTests */,
-			);
-		};
-/* End PBXProject section */
-
-/* Begin PBXResourcesBuildPhase section */
-		924223F823F5840F00CCD17B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		9242240123F5840F00CCD17B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
-
-/* Begin PBXSourcesBuildPhase section */
-		924223F623F5840F00CCD17B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9214AD4423F5881100CFBF08 /* PagingObject.swift in Sources */,
-				9214AD4D23F59C5A00CFBF08 /* SpotifyModels.swift in Sources */,
-				9242241723F5847500CCD17B /* SpotifyService.swift in Sources */,
-				9242241B23F5853D00CCD17B /* APIServiceError.swift in Sources */,
-				9242241523F5846C00CCD17B /* SociallyMusicService.swift in Sources */,
-				9214AD4723F59A9200CFBF08 /* URLSession+Extension.swift in Sources */,
-				9214AD4F23F59D5000CFBF08 /* PlaybackState.swift in Sources */,
-				9242241F23F5859400CCD17B /* SociallyTrack.swift in Sources */,
-				9214AD4B23F59B4C00CFBF08 /* AppleModels.swift in Sources */,
-				9214AD4923F59ACE00CFBF08 /* TimeRange.swift in Sources */,
-				9242241923F5848C00CCD17B /* AppleMusicService.swift in Sources */,
-				9242242123F585FC00CCD17B /* SociallyPlaylist.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		924223FF23F5840F00CCD17B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				9242240923F5840F00CCD17B /* SociallyMusicServiceTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		9242240623F5840F00CCD17B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 924223F923F5840F00CCD17B /* SociallyMusicService */;
-			targetProxy = 9242240523F5840F00CCD17B /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
-/* Begin XCBuildConfiguration section */
-		9242240C23F5840F00CCD17B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_TESTABILITY = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
-				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
-				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
-		9242240D23F5840F00CCD17B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				SDKROOT = iphoneos;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		9242240F23F5840F00CCD17B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = RHQR56U62Z;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = SociallyMusicService/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.onedgeinnovation.SociallyMusicService;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		9242241023F5840F00CCD17B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = RHQR56U62Z;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = SociallyMusicService/Info.plist;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.onedgeinnovation.SociallyMusicService;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SKIP_INSTALL = YES;
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		9242241223F5840F00CCD17B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = RHQR56U62Z;
-				INFOPLIST_FILE = SociallyMusicServiceTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.onedgeinnovation.SociallyMusicServiceTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		9242241323F5840F00CCD17B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = RHQR56U62Z;
-				INFOPLIST_FILE = SociallyMusicServiceTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.onedgeinnovation.SociallyMusicServiceTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-/* End XCBuildConfiguration section */
-
-/* Begin XCConfigurationList section */
-		924223F423F5840F00CCD17B /* Build configuration list for PBXProject "SociallyMusicService" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9242240C23F5840F00CCD17B /* Debug */,
-				9242240D23F5840F00CCD17B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		9242240E23F5840F00CCD17B /* Build configuration list for PBXNativeTarget "SociallyMusicService" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9242240F23F5840F00CCD17B /* Debug */,
-				9242241023F5840F00CCD17B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		9242241123F5840F00CCD17B /* Build configuration list for PBXNativeTarget "SociallyMusicServiceTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				9242241223F5840F00CCD17B /* Debug */,
-				9242241323F5840F00CCD17B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-/* End XCConfigurationList section */
-	};
-	rootObject = 924223F123F5840F00CCD17B /* Project object */;
+   archiveVersion = "1";
+   objectVersion = "46";
+   objects = {
+      "OBJ_1" = {
+         isa = "PBXProject";
+         attributes = {
+            LastSwiftMigration = "9999";
+            LastUpgradeCheck = "9999";
+         };
+         buildConfigurationList = "OBJ_2";
+         compatibilityVersion = "Xcode 3.2";
+         developmentRegion = "en";
+         hasScannedForEncodings = "0";
+         knownRegions = (
+            "en"
+         );
+         mainGroup = "OBJ_5";
+         productRefGroup = "OBJ_14";
+         projectDirPath = ".";
+         targets = (
+            "SociallyMusicService::SociallyMusicService",
+            "SociallyMusicService::SwiftPMPackageDescription",
+            "SociallyMusicService::SociallyMusicServicePackageTests::ProductTarget",
+            "SociallyMusicService::SociallyMusicServiceTests"
+         );
+      };
+      "OBJ_10" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_11"
+         );
+         name = "Tests";
+         path = "";
+         sourceTree = "SOURCE_ROOT";
+      };
+      "OBJ_11" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_12",
+            "OBJ_13"
+         );
+         name = "SociallyMusicServiceTests";
+         path = "Tests/SociallyMusicServiceTests";
+         sourceTree = "SOURCE_ROOT";
+      };
+      "OBJ_12" = {
+         isa = "PBXFileReference";
+         path = "Info.plist";
+         sourceTree = "<group>";
+      };
+      "OBJ_13" = {
+         isa = "PBXFileReference";
+         path = "SociallyMusicServiceTests.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_14" = {
+         isa = "PBXGroup";
+         children = (
+            "SociallyMusicService::SociallyMusicServiceTests::Product",
+            "SociallyMusicService::SociallyMusicService::Product"
+         );
+         name = "Products";
+         path = "";
+         sourceTree = "BUILT_PRODUCTS_DIR";
+      };
+      "OBJ_17" = {
+         isa = "PBXFileReference";
+         path = "README.md";
+         sourceTree = "<group>";
+      };
+      "OBJ_19" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_20",
+            "OBJ_21"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_2" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_3",
+            "OBJ_4"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_20" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            ENABLE_TESTABILITY = "YES";
+            FRAMEWORK_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
+            );
+            HEADER_SEARCH_PATHS = (
+               "$(inherited)"
+            );
+            INFOPLIST_FILE = "SociallyMusicService.xcodeproj/SociallyMusicService_Info.plist";
+            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
+            LD_RUNPATH_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            OTHER_CFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_LDFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)"
+            );
+            PRODUCT_BUNDLE_IDENTIFIER = "SociallyMusicService";
+            PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+            PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+            SKIP_INSTALL = "YES";
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)"
+            );
+            SWIFT_VERSION = "5.0";
+            TARGET_NAME = "SociallyMusicService";
+            TVOS_DEPLOYMENT_TARGET = "9.0";
+            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+         };
+         name = "Debug";
+      };
+      "OBJ_21" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            ENABLE_TESTABILITY = "YES";
+            FRAMEWORK_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
+            );
+            HEADER_SEARCH_PATHS = (
+               "$(inherited)"
+            );
+            INFOPLIST_FILE = "SociallyMusicService.xcodeproj/SociallyMusicService_Info.plist";
+            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
+            LD_RUNPATH_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/macosx"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            OTHER_CFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_LDFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)"
+            );
+            PRODUCT_BUNDLE_IDENTIFIER = "SociallyMusicService";
+            PRODUCT_MODULE_NAME = "$(TARGET_NAME:c99extidentifier)";
+            PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+            SKIP_INSTALL = "YES";
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)"
+            );
+            SWIFT_VERSION = "5.0";
+            TARGET_NAME = "SociallyMusicService";
+            TVOS_DEPLOYMENT_TARGET = "9.0";
+            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+         };
+         name = "Release";
+      };
+      "OBJ_22" = {
+         isa = "PBXSourcesBuildPhase";
+         files = (
+            "OBJ_23"
+         );
+      };
+      "OBJ_23" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_9";
+      };
+      "OBJ_24" = {
+         isa = "PBXFrameworksBuildPhase";
+         files = (
+         );
+      };
+      "OBJ_26" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_27",
+            "OBJ_28"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_27" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            LD = "/usr/bin/true";
+            OTHER_SWIFT_FLAGS = (
+               "-swift-version",
+               "5",
+               "-I",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
+               "-target",
+               "x86_64-apple-macosx10.10",
+               "-sdk",
+               "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "-package-description-version",
+               "5.1"
+            );
+            SWIFT_VERSION = "5.0";
+         };
+         name = "Debug";
+      };
+      "OBJ_28" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            LD = "/usr/bin/true";
+            OTHER_SWIFT_FLAGS = (
+               "-swift-version",
+               "5",
+               "-I",
+               "$(TOOLCHAIN_DIR)/usr/lib/swift/pm/4_2",
+               "-target",
+               "x86_64-apple-macosx10.10",
+               "-sdk",
+               "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk",
+               "-package-description-version",
+               "5.1"
+            );
+            SWIFT_VERSION = "5.0";
+         };
+         name = "Release";
+      };
+      "OBJ_29" = {
+         isa = "PBXSourcesBuildPhase";
+         files = (
+            "OBJ_30"
+         );
+      };
+      "OBJ_3" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            CLANG_ENABLE_OBJC_ARC = "YES";
+            COMBINE_HIDPI_IMAGES = "YES";
+            COPY_PHASE_STRIP = "NO";
+            DEBUG_INFORMATION_FORMAT = "dwarf";
+            DYLIB_INSTALL_NAME_BASE = "@rpath";
+            ENABLE_NS_ASSERTIONS = "YES";
+            GCC_OPTIMIZATION_LEVEL = "0";
+            GCC_PREPROCESSOR_DEFINITIONS = (
+               "$(inherited)",
+               "SWIFT_PACKAGE=1",
+               "DEBUG=1"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            ONLY_ACTIVE_ARCH = "YES";
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)",
+               "-DXcode"
+            );
+            PRODUCT_NAME = "$(TARGET_NAME)";
+            SDKROOT = "macosx";
+            SUPPORTED_PLATFORMS = (
+               "macosx",
+               "iphoneos",
+               "iphonesimulator",
+               "appletvos",
+               "appletvsimulator",
+               "watchos",
+               "watchsimulator"
+            );
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)",
+               "SWIFT_PACKAGE",
+               "DEBUG"
+            );
+            SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+            USE_HEADERMAP = "NO";
+         };
+         name = "Debug";
+      };
+      "OBJ_30" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_6";
+      };
+      "OBJ_32" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_33",
+            "OBJ_34"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_33" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+         };
+         name = "Debug";
+      };
+      "OBJ_34" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+         };
+         name = "Release";
+      };
+      "OBJ_35" = {
+         isa = "PBXTargetDependency";
+         target = "SociallyMusicService::SociallyMusicServiceTests";
+      };
+      "OBJ_37" = {
+         isa = "XCConfigurationList";
+         buildConfigurations = (
+            "OBJ_38",
+            "OBJ_39"
+         );
+         defaultConfigurationIsVisible = "0";
+         defaultConfigurationName = "Release";
+      };
+      "OBJ_38" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            CLANG_ENABLE_MODULES = "YES";
+            EMBEDDED_CONTENT_CONTAINS_SWIFT = "YES";
+            FRAMEWORK_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
+            );
+            HEADER_SEARCH_PATHS = (
+               "$(inherited)"
+            );
+            INFOPLIST_FILE = "SociallyMusicService.xcodeproj/SociallyMusicServiceTests_Info.plist";
+            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
+            LD_RUNPATH_SEARCH_PATHS = (
+               "$(inherited)",
+               "@loader_path/../Frameworks",
+               "@loader_path/Frameworks"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            OTHER_CFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_LDFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)"
+            );
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)"
+            );
+            SWIFT_VERSION = "5.0";
+            TARGET_NAME = "SociallyMusicServiceTests";
+            TVOS_DEPLOYMENT_TARGET = "9.0";
+            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+         };
+         name = "Debug";
+      };
+      "OBJ_39" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            CLANG_ENABLE_MODULES = "YES";
+            EMBEDDED_CONTENT_CONTAINS_SWIFT = "YES";
+            FRAMEWORK_SEARCH_PATHS = (
+               "$(inherited)",
+               "$(PLATFORM_DIR)/Developer/Library/Frameworks"
+            );
+            HEADER_SEARCH_PATHS = (
+               "$(inherited)"
+            );
+            INFOPLIST_FILE = "SociallyMusicService.xcodeproj/SociallyMusicServiceTests_Info.plist";
+            IPHONEOS_DEPLOYMENT_TARGET = "8.0";
+            LD_RUNPATH_SEARCH_PATHS = (
+               "$(inherited)",
+               "@loader_path/../Frameworks",
+               "@loader_path/Frameworks"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            OTHER_CFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_LDFLAGS = (
+               "$(inherited)"
+            );
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)"
+            );
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)"
+            );
+            SWIFT_VERSION = "5.0";
+            TARGET_NAME = "SociallyMusicServiceTests";
+            TVOS_DEPLOYMENT_TARGET = "9.0";
+            WATCHOS_DEPLOYMENT_TARGET = "2.0";
+         };
+         name = "Release";
+      };
+      "OBJ_4" = {
+         isa = "XCBuildConfiguration";
+         buildSettings = {
+            CLANG_ENABLE_OBJC_ARC = "YES";
+            COMBINE_HIDPI_IMAGES = "YES";
+            COPY_PHASE_STRIP = "YES";
+            DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+            DYLIB_INSTALL_NAME_BASE = "@rpath";
+            GCC_OPTIMIZATION_LEVEL = "s";
+            GCC_PREPROCESSOR_DEFINITIONS = (
+               "$(inherited)",
+               "SWIFT_PACKAGE=1"
+            );
+            MACOSX_DEPLOYMENT_TARGET = "10.10";
+            OTHER_SWIFT_FLAGS = (
+               "$(inherited)",
+               "-DXcode"
+            );
+            PRODUCT_NAME = "$(TARGET_NAME)";
+            SDKROOT = "macosx";
+            SUPPORTED_PLATFORMS = (
+               "macosx",
+               "iphoneos",
+               "iphonesimulator",
+               "appletvos",
+               "appletvsimulator",
+               "watchos",
+               "watchsimulator"
+            );
+            SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
+               "$(inherited)",
+               "SWIFT_PACKAGE"
+            );
+            SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+            USE_HEADERMAP = "NO";
+         };
+         name = "Release";
+      };
+      "OBJ_40" = {
+         isa = "PBXSourcesBuildPhase";
+         files = (
+            "OBJ_41"
+         );
+      };
+      "OBJ_41" = {
+         isa = "PBXBuildFile";
+         fileRef = "OBJ_13";
+      };
+      "OBJ_42" = {
+         isa = "PBXFrameworksBuildPhase";
+         files = (
+            "OBJ_43"
+         );
+      };
+      "OBJ_43" = {
+         isa = "PBXBuildFile";
+         fileRef = "SociallyMusicService::SociallyMusicService::Product";
+      };
+      "OBJ_44" = {
+         isa = "PBXTargetDependency";
+         target = "SociallyMusicService::SociallyMusicService";
+      };
+      "OBJ_5" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_6",
+            "OBJ_7",
+            "OBJ_10",
+            "OBJ_14",
+            "OBJ_17"
+         );
+         path = "";
+         sourceTree = "<group>";
+      };
+      "OBJ_6" = {
+         isa = "PBXFileReference";
+         explicitFileType = "sourcecode.swift";
+         path = "Package.swift";
+         sourceTree = "<group>";
+      };
+      "OBJ_7" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_8"
+         );
+         name = "Sources";
+         path = "";
+         sourceTree = "SOURCE_ROOT";
+      };
+      "OBJ_8" = {
+         isa = "PBXGroup";
+         children = (
+            "OBJ_9"
+         );
+         name = "SociallyMusicService";
+         path = "Sources/SociallyMusicService";
+         sourceTree = "SOURCE_ROOT";
+      };
+      "OBJ_9" = {
+         isa = "PBXFileReference";
+         path = "SociallyMusicService.swift";
+         sourceTree = "<group>";
+      };
+      "SociallyMusicService::SociallyMusicService" = {
+         isa = "PBXNativeTarget";
+         buildConfigurationList = "OBJ_19";
+         buildPhases = (
+            "OBJ_22",
+            "OBJ_24"
+         );
+         dependencies = (
+         );
+         name = "SociallyMusicService";
+         productName = "SociallyMusicService";
+         productReference = "SociallyMusicService::SociallyMusicService::Product";
+         productType = "com.apple.product-type.framework";
+      };
+      "SociallyMusicService::SociallyMusicService::Product" = {
+         isa = "PBXFileReference";
+         path = "SociallyMusicService.framework";
+         sourceTree = "BUILT_PRODUCTS_DIR";
+      };
+      "SociallyMusicService::SociallyMusicServicePackageTests::ProductTarget" = {
+         isa = "PBXAggregateTarget";
+         buildConfigurationList = "OBJ_32";
+         buildPhases = (
+         );
+         dependencies = (
+            "OBJ_35"
+         );
+         name = "SociallyMusicServicePackageTests";
+         productName = "SociallyMusicServicePackageTests";
+      };
+      "SociallyMusicService::SociallyMusicServiceTests" = {
+         isa = "PBXNativeTarget";
+         buildConfigurationList = "OBJ_37";
+         buildPhases = (
+            "OBJ_40",
+            "OBJ_42"
+         );
+         dependencies = (
+            "OBJ_44"
+         );
+         name = "SociallyMusicServiceTests";
+         productName = "SociallyMusicServiceTests";
+         productReference = "SociallyMusicService::SociallyMusicServiceTests::Product";
+         productType = "com.apple.product-type.bundle.unit-test";
+      };
+      "SociallyMusicService::SociallyMusicServiceTests::Product" = {
+         isa = "PBXFileReference";
+         path = "SociallyMusicServiceTests.xctest";
+         sourceTree = "BUILT_PRODUCTS_DIR";
+      };
+      "SociallyMusicService::SwiftPMPackageDescription" = {
+         isa = "PBXNativeTarget";
+         buildConfigurationList = "OBJ_26";
+         buildPhases = (
+            "OBJ_29"
+         );
+         dependencies = (
+         );
+         name = "SociallyMusicServicePackageDescription";
+         productName = "SociallyMusicServicePackageDescription";
+         productType = "com.apple.product-type.framework";
+      };
+   };
+   rootObject = "OBJ_1";
 }
