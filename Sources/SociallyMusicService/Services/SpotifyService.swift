@@ -17,14 +17,14 @@ public class SpotifyService: MusicService {
     
     public func searchByISRC(isrc: String, completion: @escaping (String) -> Void) {
         var component = URLComponents(string: baseURL.appendingPathComponent("search").absoluteString)
-                
+        
         component?.queryItems = [
             URLQueryItem(name: "q", value: "isrc:\(isrc)"),
             URLQueryItem(name: "type", value: "track")
         ]
-
+        
         guard let url = component?.url else { return }
-
+        
         var request = URLRequest(url: url)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         fetchResources(request: request) { (result: Result<TrackPagingObject<TrackItem>, APIServiceError>) in
@@ -56,7 +56,7 @@ public class SpotifyService: MusicService {
         fetchResources(request: urlreq, completion: result)
     }
     
-    public func fetchTopArtists(limit: Int = 20, offset: Int = 0, timeRange: TimeRange = .longTerm, result: @escaping (Result<PagingObject<Artist>, APIServiceError>) -> Void) {
+    public func fetchTopArtists(limit: Int = 20, offset: Int = 0, timeRange: TimeRange = .longTerm, result: @escaping (Result<PagingObject<SociallyArtist>, APIServiceError>) -> Void) {
         
         let params: [URLQueryItem] = [
             URLQueryItem(name: "limit", value: "\(limit)"),
@@ -71,11 +71,11 @@ public class SpotifyService: MusicService {
             return
         }
         var urlreq = URLRequest(url: finURL)
+        urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         fetchResources(request: urlreq, completion: result)
-        
     }
     
-    public func fetchTopSongs(limit: Int = 20, offset: Int = 0, timeRange: TimeRange = .mediumTerm, result: @escaping (Result<PagingObject<TrackItem>, APIServiceError>) -> Void) {
+    public func fetchTopSongs(limit: Int = 20, offset: Int = 0, timeRange: TimeRange = .mediumTerm, result: @escaping (Result<PagingObject<SociallyTrack>, APIServiceError>) -> Void) {
         let params: [URLQueryItem] = [
             URLQueryItem(name: "limit", value: "\(limit)"),
             URLQueryItem(name: "offset", value: "\(offset)"),
@@ -94,7 +94,7 @@ public class SpotifyService: MusicService {
         fetchResources(request: urlreq, completion: result)
     }
     
-    public func fetchRecentlyPlayed(limit: Int = 10, result: @escaping (Result<PagingObject<PlayHistoryObject>, APIServiceError>) -> Void) {
+    public func fetchRecentlyPlayed(limit: Int = 10, result: @escaping (Result<PagingObject<SociallyTrack>, APIServiceError>) -> Void) {
         let params: [URLQueryItem] = [
             URLQueryItem(name: "limit", value: "\(limit)")
         ]
@@ -217,7 +217,7 @@ public class SpotifyService: MusicService {
             group.wait()
         }
     }
-      
+    
     func getTracksForPlaylist(_ playlistId: String, url: URL?, result: @escaping (Result<PagingObject<PlaylistTrack>, APIServiceError>) -> Void) {
         if let url = url {
             fetchResources(request: URLRequest(url: url), completion: result)

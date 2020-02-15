@@ -16,7 +16,7 @@ public class AppleMusicService: MusicService {
     private var appleToken = ""
     private var devToken = ""
     
-    public func searchByISRC(isrc: String, completion: @escaping (String) -> Void) {
+    public func searchByISRC(isrc: String, completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
         let countryCode = "us"
         var component = URLComponents(string: baseURL.appendingPathComponent("catalog/\(countryCode)/songs").absoluteString)
         
@@ -32,13 +32,14 @@ public class AppleMusicService: MusicService {
         fetchResources(request: request) { (result: Result<ResponseRoot<Track>, APIServiceError>) in
             switch result {
             case .success(let track):
-                guard track.data?.count ?? 0 > 0, let trackId = track.data?[0].id else {
-                    completion("")
+                guard track.data?.count ?? 0 > 0, let track = track.data?[0], let trackAtt = track.attributes else {
+                    completion(.failure(.noData))
                     return
                 }
-                completion(trackId)
-            case .failure:
-                completion("")
+                let sociallyTrack = SociallyTrack(album: trackAtt.albumName, artist: trackAtt.artistName, name: trackAtt.name, isrc: trackAtt.name, context: track.id, imageURL: trackAtt.artwork.url)
+                completion(.success(sociallyTrack))
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
     }
@@ -83,9 +84,9 @@ public class AppleMusicService: MusicService {
     func getAllSongsFor(playlist: String, completion: @escaping (Result<[SociallyTrack], Error>) -> Void) {
         
         let component = URLComponents(string: baseURL.appendingPathComponent("me/library/playlists/\(playlist)/tracks").absoluteString)
-
+        
         guard let url = component?.url else { return }
-
+        
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
         request.setValue(appleToken, forHTTPHeaderField: "Music-User-Token")

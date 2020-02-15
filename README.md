@@ -7,6 +7,9 @@
   <img src="https://img.shields.io/badge/Xcode-11-blue.svg"
       alt="Xcode">
 </a>
+<a href="https://swift.org/package-manager">
+    <img src="https://img.shields.io/badge/swiftpm-compatible-brightgreen.svg?style=flat" alt="Swift Package Manager" />
+</a>
 <a href="https://opensource.org/licenses/MIT">
   <img src="https://img.shields.io/badge/License-MIT-red.svg"
       alt="MIT">
@@ -27,13 +30,10 @@ In order to add this framework as a dependency:
 ## Usage
 
 
-## Initial Setup
+## Spotify Usage
 
 
-## Spotify Notes
-
-
-## Apple Music Notes
+## Apple Music Usage
 
 
 ## License
