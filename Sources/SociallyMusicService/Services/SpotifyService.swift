@@ -10,10 +10,12 @@ import Foundation
 
 public class SpotifyService: MusicService {
     
-    public static let shared = SpotifyService()
     private let baseURL = URL(string: "https://api.spotify.com/v1/")!
+    private var token: String
     
-    var token = ""
+    public init(token: String) {
+        self.token = token
+    }
     
     public func searchByISRC(isrc: String, completion: @escaping (String) -> Void) {
         var component = URLComponents(string: baseURL.appendingPathComponent("search").absoluteString)

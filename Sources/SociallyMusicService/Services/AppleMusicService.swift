@@ -10,11 +10,15 @@ import Foundation
 
 public class AppleMusicService: MusicService {
     
-    public static let shared = AppleMusicService()
     private let baseURL = URL(string: "https://api.music.apple.com/v1/")!
     
-    private var appleToken = ""
-    private var devToken = ""
+    private var userToken: String
+    private var devToken: String
+    
+    public init(devToken: String, userToken: String = "") {
+        self.devToken = devToken
+        self.userToken = userToken
+    }
     
     public func searchByISRC(isrc: String, completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
         let countryCode = "us"
@@ -64,7 +68,7 @@ public class AppleMusicService: MusicService {
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
-        request.setValue(appleToken, forHTTPHeaderField: "Music-User-Token")
+        request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
         
         fetchResources(request: request) { (result: Result<ResponseRoot<ApplePlaylist>, APIServiceError>) in
             switch result {
@@ -89,7 +93,7 @@ public class AppleMusicService: MusicService {
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
-        request.setValue(appleToken, forHTTPHeaderField: "Music-User-Token")
+        request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
         
         fetchResources(request: request) { (result: Result<ResponseRoot<Track>, APIServiceError>) in
             switch result {
@@ -131,7 +135,7 @@ public class AppleMusicService: MusicService {
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
-        request.setValue(appleToken, forHTTPHeaderField: "Music-User-Token")
+        request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
         request.httpMethod = "POST"
         request.httpBody = jsonData
         
