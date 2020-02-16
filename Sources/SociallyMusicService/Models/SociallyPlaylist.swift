@@ -10,13 +10,13 @@ import Foundation
 
 public struct SociallyPlaylist: Codable {
     
-    let playlistUri: String
-    let playlistId: String
-    let name: String
-    var imageURL: URL?
-    let description: String
-    let authorName: String
-    let authorId: String
+    public let playlistUri: String
+    public let playlistId: String
+    public let name: String
+    public var imageURL: URL?
+    public let description: String
+    public let authorName: String
+    public let authorId: String
     
     init(from playlist: Playlist) {
         self.name = playlist.name

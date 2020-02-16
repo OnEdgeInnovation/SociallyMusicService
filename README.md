@@ -10,13 +10,13 @@
 <a href="https://swift.org/package-manager">
     <img src="https://img.shields.io/badge/swiftpm-compatible-brightgreen.svg?style=flat" alt="Swift Package Manager" />
 </a>
-<a href="https://opensource.org/licenses/MIT">
-  <img src="https://img.shields.io/badge/License-MIT-red.svg"
-      alt="MIT">
-</a>
 <a href="https://github.com/OnEdgeInnovation/SociallyMusicService/issues">
    <img src="https://img.shields.io/badge/contributions-Welcome-brightgreen.svg?style=flat"
         alt="Contributions Welcome">
+</a>
+<a href="https://opensource.org/licenses/MIT">
+  <img src="https://img.shields.io/badge/License-MIT-red.svg"
+      alt="MIT">
 </a>
 
 ## Installation
@@ -25,7 +25,7 @@ In order to add this framework as a dependency:
 - Open your project in Xcode 11.0>=
 - Click File>Swift Packages>Add Package Dependency
 - Then put in the URL of this repo: https://github.com/OnEdgeInnovation/SociallyMusicService.git
-- Confire the versioning as master. Master branch will be the working/tested copy of this repo
+- Configure the versioning as master. Master branch will be the working/tested copy of this repo
 
 ## Usage
 

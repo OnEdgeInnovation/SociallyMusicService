@@ -10,6 +10,13 @@ import Foundation
 
 public struct SociallyTrack: Codable {
     
+    public let album: String
+    public let artist: String
+    public let name: String
+    public let isrc: String
+    public let context: String
+    public let imageURL: String
+    
     init(album: String, artist: String, name: String, isrc: String, context: String, imageURL: String) {
         self.album = album
         self.artist = artist
@@ -31,11 +38,4 @@ public struct SociallyTrack: Codable {
         self.imageURL = track.album.images?[0].url.absoluteString ?? ""
         self.isrc = track.externalIds?.isrc ?? ""
     }
-    
-    let album: String
-    let artist: String
-    let name: String
-    let isrc: String
-    let context: String
-    let imageURL: String
 }

@@ -8,6 +8,12 @@
 import Foundation
 
 public struct SociallyArtist: Codable {
-    let name: String
-    let imageURL: String
+    
+    public let name: String
+    public let imageURL: String
+    
+    init(from artist: Artist) {
+        self.name = artist.name
+        self.imageURL = artist.images[0].url.absoluteString
+    }
 }

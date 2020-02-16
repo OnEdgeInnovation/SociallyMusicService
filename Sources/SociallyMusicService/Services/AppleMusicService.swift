@@ -20,8 +20,7 @@ public class AppleMusicService: MusicService {
         self.userToken = userToken
     }
     
-    public func searchByISRC(isrc: String, completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
-        let countryCode = "us"
+    public func searchByISRC(isrc: String, countryCode: String = "us", completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
         var component = URLComponents(string: baseURL.appendingPathComponent("catalog/\(countryCode)/songs").absoluteString)
         
         component?.queryItems = [
@@ -48,16 +47,12 @@ public class AppleMusicService: MusicService {
         }
     }
     
-    public func playSong(context: String, result: @escaping (Bool) -> Void) {
-        result(true)
-    }
-    
     public func fetchCurrentTrack(completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
         let track = ""
         fetchSongByIdentifier(identifier: track, completion: completion)
     }
     
-    func getAllPlaylists(completion: @escaping (Result<[SociallyPlaylist], APIServiceError>) -> Void) {
+    public func getPlaylists(completion: @escaping (Result<[SociallyPlaylist], APIServiceError>) -> Void) {
         
         var component = URLComponents(string: baseURL.appendingPathComponent("me/library/playlists").absoluteString)
         
@@ -85,7 +80,67 @@ public class AppleMusicService: MusicService {
         }
     }
     
-    func getAllSongsFor(playlist: String, completion: @escaping (Result<[SociallyTrack], Error>) -> Void) {
+    public func addToPlaylist(playlistId: String, track: String, completion: @escaping (Result<[String: String], APIServiceError>) -> Void) {
+        
+        let component = URLComponents(string: baseURL.appendingPathComponent("me/library/playlists/\(playlistId)/tracks").absoluteString)
+        
+        guard let url = component?.url else { return }
+        
+        let body: [String: Any] = [
+            "data": [["id": track, "type": "songs"]]]
+        
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
+            completion(.failure(APIServiceError.invalidCompiledURL))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
+        request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
+        request.httpMethod = "POST"
+        request.httpBody = jsonData
+        
+        sendRequestNoPayload(request: request) { (result) in
+            switch result {
+            case .success:
+                completion(.success([:]))
+            case .failure(let err):
+                completion(.failure(err))
+            }
+        }
+    }
+}
+
+//MARK: Helper Functions
+extension AppleMusicService {
+    
+    private func fetchSongByIdentifier(identifier: String, completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
+        let countryCode = "us"
+        let component = URLComponents(string: baseURL.appendingPathComponent("catalog/\(countryCode)/songs/\(identifier)").absoluteString)
+        
+        guard let url = component?.url else { return }
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
+        
+        fetchResources(request: request) { (result: Result<ResponseRoot<Track>, APIServiceError>) in
+            switch result {
+            case .success(let track):
+                guard let trackAttributes = track.data?[0].attributes else {
+                    completion(.failure(.apiError))
+                    return
+                }
+                var imageURL = trackAttributes.artwork.url
+                imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
+                let sociallyTrack = SociallyTrack(album: trackAttributes.albumName, artist: trackAttributes.artistName, name: trackAttributes.name, isrc: trackAttributes.isrc, context: identifier, imageURL: imageURL)
+                completion(.success(sociallyTrack))
+            case .failure:
+                completion(.failure(.apiError))
+            }
+        }
+    }
+    
+    private func getAllTracksForPlaylist(playlist: String, completion: @escaping (Result<[SociallyTrack], Error>) -> Void) {
         
         let component = URLComponents(string: baseURL.appendingPathComponent("me/library/playlists/\(playlist)/tracks").absoluteString)
         
@@ -115,62 +170,6 @@ public class AppleMusicService: MusicService {
                 completion(.success(SociallyTracks))
             case .failure:
                 completion(.failure(APIServiceError.apiError))
-            }
-        }
-    }
-    
-    func addSong(_ song: String, to playlist: String, completion: @escaping (Result<[String: String], APIServiceError>) -> Void) {
-        
-        let component = URLComponents(string: baseURL.appendingPathComponent("me/library/playlists/\(playlist)/tracks").absoluteString)
-        
-        guard let url = component?.url else { return }
-        
-        let body: [String: Any] = [
-            "data": [["id": song, "type": "songs"]]]
-        
-        guard let jsonData = try? JSONSerialization.data(withJSONObject: body) else {
-            completion(.failure(APIServiceError.invalidCompiledURL))
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
-        request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
-        request.httpMethod = "POST"
-        request.httpBody = jsonData
-        
-        sendRequestNoPayload(request: request) { (result) in
-            switch result {
-            case .success:
-                completion(.success([:]))
-            case .failure(let err):
-                completion(.failure(err))
-            }
-        }
-    }
-    
-    private func fetchSongByIdentifier(identifier: String, completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
-        let countryCode = "us"
-        let component = URLComponents(string: baseURL.appendingPathComponent("catalog/\(countryCode)/songs/\(identifier)").absoluteString)
-        
-        guard let url = component?.url else { return }
-        
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
-        
-        fetchResources(request: request) { (result: Result<ResponseRoot<Track>, APIServiceError>) in
-            switch result {
-            case .success(let track):
-                guard let trackAttributes = track.data?[0].attributes else {
-                    completion(.failure(.apiError))
-                    return
-                }
-                var imageURL = trackAttributes.artwork.url
-                imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
-                let sociallyTrack = SociallyTrack(album: trackAttributes.albumName, artist: trackAttributes.artistName, name: trackAttributes.name, isrc: trackAttributes.isrc, context: identifier, imageURL: imageURL)
-                completion(.success(sociallyTrack))
-            case .failure:
-                completion(.failure(.apiError))
             }
         }
     }
