@@ -252,15 +252,20 @@ public class SpotifyService: MusicService {
     ///   - uri: the uri for a track
     ///   - completion: completion handler returning the contextt
     public func getTrackInfo(id: String, completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
-        var component = URLComponents(string: baseURL.appendingPathComponent("tracks").absoluteString)
         
-        component?.queryItems = [
+        let params: [URLQueryItem] = [
             URLQueryItem(name: "id", value: "\(id)")
         ]
         
-        guard let url = component?.url else { return }
+        var component = URLComponents(string: baseURL.appendingPathComponent("tracks").absoluteString)
+        component?.queryItems = params
         
-        var request = URLRequest(url: url)
+        guard let finURL = component?.url else {
+            completion(.failure(.invalidCompiledURL))
+            return
+        }
+        
+        var request = URLRequest(url: finURL)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         fetchResources(request: request) { (result: Result<TrackItem, APIServiceError>) in
             switch result {
