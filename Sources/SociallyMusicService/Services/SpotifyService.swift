@@ -248,7 +248,7 @@ public class SpotifyService: MusicService {
         var component = URLComponents(string: baseURL.appendingPathComponent("tracks").absoluteString)
         
         component?.queryItems = [
-            URLQueryItem(name: "ids", value: ids.joined(separator: ", "))
+            URLQueryItem(name: "ids", value: ids.joined(separator: ","))
         ]
         
         guard let url = component?.url else { return }
