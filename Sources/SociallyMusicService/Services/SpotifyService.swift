@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// Hosting service for Spotify service calls
 public class SpotifyService: MusicService {
     
     private let baseURL = URL(string: "https://api.spotify.com/v1/")!
@@ -17,28 +18,8 @@ public class SpotifyService: MusicService {
         self.token = token
     }
     
-    public func searchByISRC(isrc: String, completion: @escaping (String) -> Void) {
-        var component = URLComponents(string: baseURL.appendingPathComponent("search").absoluteString)
-        
-        component?.queryItems = [
-            URLQueryItem(name: "q", value: "isrc:\(isrc)"),
-            URLQueryItem(name: "type", value: "track")
-        ]
-        
-        guard let url = component?.url else { return }
-        
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        fetchResources(request: request) { (result: Result<TrackPagingObject<TrackItem>, APIServiceError>) in
-            switch result {
-            case .success(let pagingObj):
-                completion(pagingObj.tracks.items[0].uri)
-            case .failure:
-                completion("")
-            }
-        }
-    }
-    
+    /// Returns the playlists for the current token
+    /// - Parameter result: completion handler returning the array of playlists or error
     public func getPlaylists(result: @escaping (Result<[SociallyPlaylist], APIServiceError>) -> Void) {
         var arr = [Playlist]()
         var url: URL?
@@ -66,6 +47,11 @@ public class SpotifyService: MusicService {
         }
     }
     
+    /// Adds the given context of a track to the playlist
+    /// - Parameters:
+    ///   - playlistId: The playlist id to add to
+    ///   - track: the track context ot be added
+    ///   - result: completion handler returning the result
     public func addToPlaylist(playlistId: String, track: String, result: @escaping (Result<[String: String], APIServiceError>) -> Void) {
         let params: [URLQueryItem] = [
             URLQueryItem(name: "uris", value: "\(track)")
@@ -85,6 +71,11 @@ public class SpotifyService: MusicService {
         fetchResources(request: urlreq, completion: result)
     }
     
+    /// Deletes a track from the playlist
+    /// - Parameters:
+    ///   - playlistId: The id of the playlist
+    ///   - trackId: The id of the track
+    ///   - result: completion handler returning the result
     public func deleteFromPlaylist(_ playlistId: String, trackId: String, result: @escaping (Result<[String: String], APIServiceError>) -> Void) {
         let params: [URLQueryItem] = [
             URLQueryItem(name: "tracks", value: "\([["uri": trackId]])")
@@ -102,6 +93,12 @@ public class SpotifyService: MusicService {
         fetchResources(request: urlreq, completion: result)
     }
     
+    /// Fetch the users top artists from Spotify given the parameters
+    /// - Parameters:
+    ///   - limit: How many tracks to fetch
+    ///   - offset: The offset from the beginning
+    ///   - timeRange: How long of time to consider
+    ///   - completion: completion handler returning the result
     public func fetchTopArtists(limit: Int = 20, offset: Int = 0, timeRange: TimeRange = .longTerm, completion: @escaping (Result<[SociallyArtist], APIServiceError>) -> Void) {
         
         let params: [URLQueryItem] = [
@@ -128,6 +125,12 @@ public class SpotifyService: MusicService {
         }
     }
     
+    /// Fetch the users top tracks from Spotify given the parameters
+    /// - Parameters:
+    ///   - limit: How many tracks to fetch
+    ///   - offset: The offset from the beginning
+    ///   - timeRange: How long of time to consider
+    ///   - completion: completion handler returning the result
     public func fetchTopSongs(limit: Int = 20, offset: Int = 0, timeRange: TimeRange = .mediumTerm, completion: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
         let params: [URLQueryItem] = [
             URLQueryItem(name: "limit", value: "\(limit)"),
@@ -154,7 +157,12 @@ public class SpotifyService: MusicService {
         }
     }
     
-    public func fetchRecentlyPlayed(limit: Int = 10, result: @escaping (Result<PagingObject<SociallyTrack>, APIServiceError>) -> Void) {
+    /// Fetches the last 10 played tracks for the user
+    /// - Parameters:
+    ///   - completion: completion handler returning the result
+    public func fetchRecentlyPlayed(completion: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
+        
+        let limit = 10
         let params: [URLQueryItem] = [
             URLQueryItem(name: "limit", value: "\(limit)")
         ]
@@ -163,14 +171,39 @@ public class SpotifyService: MusicService {
         component?.queryItems = params
         
         guard let finURL = component?.url else {
-            result(.failure(.invalidCompiledURL))
+            completion(.failure(.invalidCompiledURL))
             return
         }
         var urlreq = URLRequest(url: finURL)
         urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        fetchResources(request: urlreq, completion: result)
+        fetchResources(request: urlreq) { (result: Result<PagingObject<PlayHistoryObject>, APIServiceError>) in
+            switch result {
+            case .failure(let error):
+                completion(.failure(error))
+            case .success(let pagingObject):
+                let group = DispatchGroup()
+                var tracks = [SociallyTrack]()
+                for item in pagingObject.items {
+                    group.enter()
+                    self.searchByUri(uri: item.track.uri) { (track) in
+                        switch track {
+                        case .success(let trackResult):
+                            tracks.append(trackResult)
+                            group.leave()
+                        case .failure(let error):
+                            completion(.failure(error))
+                            group.leave()
+                        }
+                    }
+                }
+                group.wait()
+                completion(.success(tracks))
+            }
+        }
     }
     
+    /// Hits the Spotify API for what track the current user is listening to
+    /// - Parameter completion: completion handler returning the result
     public func fetchCurrentTrack(completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
         //Get proper URL
         let url = baseURL.appendingPathComponent("me/player/currently-playing")
@@ -182,8 +215,60 @@ public class SpotifyService: MusicService {
             case .success(let trackResult):
                 let track = SociallyTrack(album: trackResult.item.album.name, artist: trackResult.item.artists[0].name, name: trackResult.item.name, isrc: trackResult.item.externalIds?.isrc ?? "", context: trackResult.item.uri, imageURL: trackResult.item.album.images?[0].url.absoluteString ?? "")
                 completion(.success(track))
-            case .failure:
-                completion(.failure(.apiError))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    /// Takes an ISRC and returns back the Spotify context for that track
+    /// - Parameters:
+    ///   - isrc: the ISRC for a track
+    ///   - completion: completion handler returning the contextt
+    public func searchByISRC(isrc: String, completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
+        var component = URLComponents(string: baseURL.appendingPathComponent("search").absoluteString)
+        
+        component?.queryItems = [
+            URLQueryItem(name: "q", value: "isrc:\(isrc)"),
+            URLQueryItem(name: "type", value: "track")
+        ]
+        
+        guard let url = component?.url else { return }
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        fetchResources(request: request) { (result: Result<TrackPagingObject<TrackItem>, APIServiceError>) in
+            switch result {
+            case .success(let pagingObj):
+                completion(.success(SociallyTrack(from: pagingObj.tracks.items[0])))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    /// Takes an ISRC and returns back the Spotify context for that track
+    /// - Parameters:
+    ///   - uri: the uri for a track
+    ///   - completion: completion handler returning the contextt
+    public func searchByUri(uri: String, completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
+        var component = URLComponents(string: baseURL.appendingPathComponent("search").absoluteString)
+        
+        component?.queryItems = [
+            URLQueryItem(name: "q", value: "uri:\(uri)"),
+            URLQueryItem(name: "type", value: "track")
+        ]
+        
+        guard let url = component?.url else { return }
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        fetchResources(request: request) { (result: Result<TrackPagingObject<TrackItem>, APIServiceError>) in
+            switch result {
+            case .success(let pagingObj):
+                completion(.success(SociallyTrack(from: pagingObj.tracks.items[0])))
+            case .failure(let error):
+                completion(.failure(error))
             }
         }
     }
