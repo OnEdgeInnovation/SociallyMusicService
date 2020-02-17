@@ -72,6 +72,7 @@ struct SimplifiedTrack: Codable {
     let previewUrl: String
     let trackNumber: Int
     let uri: String
+    let id: String
 }
 
 struct ExternalId: Codable {

@@ -185,7 +185,7 @@ public class SpotifyService: MusicService {
                 var tracks = [SociallyTrack]()
                 for item in pagingObject.items {
                     group.enter()
-                    self.searchByUri(uri: item.track.uri) { (track) in
+                    self.getTrackInfo(id: item.track.id) { (track) in
                         switch track {
                         case .success(let trackResult):
                             tracks.append(trackResult)
@@ -251,22 +251,21 @@ public class SpotifyService: MusicService {
     /// - Parameters:
     ///   - uri: the uri for a track
     ///   - completion: completion handler returning the contextt
-    public func searchByUri(uri: String, completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
-        var component = URLComponents(string: baseURL.appendingPathComponent("search").absoluteString)
+    public func getTrackInfo(id: String, completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
+        var component = URLComponents(string: baseURL.appendingPathComponent("tracks").absoluteString)
         
         component?.queryItems = [
-            URLQueryItem(name: "q", value: "upc:\(uri)"),
-            URLQueryItem(name: "type", value: "track")
+            URLQueryItem(name: "id", value: "\(id)")
         ]
         
         guard let url = component?.url else { return }
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        fetchResources(request: request) { (result: Result<TrackPagingObject<TrackItem>, APIServiceError>) in
+        fetchResources(request: request) { (result: Result<TrackResult, APIServiceError>) in
             switch result {
-            case .success(let pagingObj):
-                completion(.success(SociallyTrack(from: pagingObj.tracks.items[0])))
+            case .success(let track):
+                completion(.success(SociallyTrack(from: track.item)))
             case .failure(let error):
                 completion(.failure(error))
             }
