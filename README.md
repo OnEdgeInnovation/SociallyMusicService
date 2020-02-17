@@ -49,6 +49,7 @@ service.getPlaylists { (result) in
 ```
 
 You can view an entire demo project [Here.](https://github.com/OnEdgeInnovation/SociallyMusicServiceDemo)
+
 ![](giphy.gif)
 
 ## Spotify Usage
