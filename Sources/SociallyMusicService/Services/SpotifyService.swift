@@ -181,23 +181,14 @@ public class SpotifyService: MusicService {
             case .failure(let error):
                 completion(.failure(error))
             case .success(let pagingObject):
-                let group = DispatchGroup()
-                var tracks = [SociallyTrack]()
-                for item in pagingObject.items {
-                    group.enter()
-                    self.getTrackInfo(id: item.track.id) { (track) in
-                        switch track {
-                        case .success(let trackResult):
-                            tracks.append(trackResult)
-                            group.leave()
-                        case .failure(let error):
-                            completion(.failure(error))
-                            group.leave()
-                        }
+                let ids = pagingObject.items.map { $0.track.id }
+                self.getMultipleTracksInfo(ids: ids) { (tracks) in
+                    switch tracks {
+                    case .success(let trackList):
+                        completion(.success(trackList))
+                    case .failure(let error):
+                        completion(.failure(error))
                     }
-                }
-                group.notify(queue: DispatchQueue.main) {
-                    completion(.success(tracks))
                 }
             }
         }
@@ -250,7 +241,33 @@ public class SpotifyService: MusicService {
     
     /// Takes an id and returns back the Spotify context for that track
     /// - Parameters:
-    ///   - uri: the uri for a track
+    ///   - ids: the array of ids you'd like to get info on
+    ///   - completion: completion handler returning the contextt
+    public func getMultipleTracksInfo(ids: [String], completion: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
+        
+        var component = URLComponents(string: baseURL.appendingPathComponent("tracks").absoluteString)
+        
+        component?.queryItems = [
+            URLQueryItem(name: "ids", value: ids.joined(separator: ", "))
+        ]
+        
+        guard let url = component?.url else { return }
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        fetchResources(request: request) { (result: Result<TrackItemList, APIServiceError>) in
+            switch result {
+            case .success(let list):
+                completion(.success(list.tracks.map({SociallyTrack(from: $0)})))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
+    /// Takes an id and returns back the Spotify context for that track
+    /// - Parameters:
+    ///   - id: the id for a track
     ///   - completion: completion handler returning the contextt
     public func getTrackInfo(id: String, completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
         

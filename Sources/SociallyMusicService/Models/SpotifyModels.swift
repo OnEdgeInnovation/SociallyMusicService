@@ -50,6 +50,10 @@ struct TrackItem: Codable {
     let uri: String
 }
 
+struct TrackItemList: Codable {
+    let tracks: [TrackItem]
+}
+
 struct SimplifiedAlbum: Codable {
     let artists: [SimplifiedArtist]
     let images: [SpotifyImage]?
