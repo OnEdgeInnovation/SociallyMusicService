@@ -195,9 +195,10 @@ public class SpotifyService: MusicService {
                             group.leave()
                         }
                     }
-                    group.wait()
                 }
-                completion(.success(tracks))
+                group.notify(queue: DispatchQueue.main) {
+                    completion(.success(tracks))
+                }
             }
         }
     }
