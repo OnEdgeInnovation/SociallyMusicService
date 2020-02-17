@@ -255,7 +255,7 @@ public class SpotifyService: MusicService {
         var component = URLComponents(string: baseURL.appendingPathComponent("search").absoluteString)
         
         component?.queryItems = [
-            URLQueryItem(name: "q", value: "\(uri)"),
+            URLQueryItem(name: "q", value: "upc:\(uri)"),
             URLQueryItem(name: "type", value: "track")
         ]
         
