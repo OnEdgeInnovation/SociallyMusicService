@@ -262,10 +262,10 @@ public class SpotifyService: MusicService {
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        fetchResources(request: request) { (result: Result<TrackResult, APIServiceError>) in
+        fetchResources(request: request) { (result: Result<TrackItem, APIServiceError>) in
             switch result {
             case .success(let track):
-                completion(.success(SociallyTrack(from: track.item)))
+                completion(.success(SociallyTrack(from: track)))
             case .failure(let error):
                 completion(.failure(error))
             }
