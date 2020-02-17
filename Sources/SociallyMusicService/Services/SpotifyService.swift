@@ -203,7 +203,7 @@ public class SpotifyService: MusicService {
         }
     }
     
-    /// Hits the Spotify API for what track the current user is listening to
+    /// Fetches track the current user is listening to
     /// - Parameter completion: completion handler returning the result
     public func fetchCurrentTrack(completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
         //Get proper URL
@@ -222,7 +222,7 @@ public class SpotifyService: MusicService {
         }
     }
     
-    /// Takes an ISRC and returns back the Spotify context for that track
+    /// Takes an ISRC and returns back the track information
     /// - Parameters:
     ///   - isrc: the ISRC for a track
     ///   - completion: completion handler returning the contextt
@@ -248,7 +248,7 @@ public class SpotifyService: MusicService {
         }
     }
     
-    /// Takes an ISRC and returns back the Spotify context for that track
+    /// Takes an id and returns back the Spotify context for that track
     /// - Parameters:
     ///   - uri: the uri for a track
     ///   - completion: completion handler returning the contextt
