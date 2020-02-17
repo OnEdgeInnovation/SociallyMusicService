@@ -253,12 +253,7 @@ public class SpotifyService: MusicService {
     ///   - completion: completion handler returning the contextt
     public func getTrackInfo(id: String, completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
         
-        let params: [URLQueryItem] = [
-            URLQueryItem(name: "id", value: "\(id)")
-        ]
-        
-        var component = URLComponents(string: baseURL.appendingPathComponent("tracks").absoluteString)
-        component?.queryItems = params
+        let component = URLComponents(string: baseURL.appendingPathComponent("tracks/\(id)").absoluteString)
         
         guard let finURL = component?.url else {
             completion(.failure(.invalidCompiledURL))
