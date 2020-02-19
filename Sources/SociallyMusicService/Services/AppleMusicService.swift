@@ -129,7 +129,7 @@ public class AppleMusicService: MusicService {
     /// - Parameters:
     ///   - playlist: the playlist to fetch tracks for
     ///   - result: the completion handler containing the result of tracks or error
-    private func getAllTracksForPlaylist(playlist: String, result: @escaping (Result<[SociallyTrack], Error>) -> Void) {
+    public func getAllTracksForPlaylist(playlist: String, result: @escaping (Result<[SociallyTrack], Error>) -> Void) {
         
         let component = URLComponents(string: baseURL.appendingPathComponent("me/library/playlists/\(playlist)/tracks").absoluteString)
         
