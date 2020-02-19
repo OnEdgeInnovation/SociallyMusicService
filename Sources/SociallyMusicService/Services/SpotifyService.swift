@@ -180,7 +180,7 @@ public class SpotifyService: MusicService {
         var urlreq = URLRequest(url: finURL)
         urlreq.httpMethod = "POST"
         urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        fetchResources(request: urlreq, completion: result)
+        fetchResources(request: urlreq, result: result)
     }
     
     /// Deletes a track from the playlist
@@ -202,7 +202,7 @@ public class SpotifyService: MusicService {
         }
         var urlreq = URLRequest(url: finURL)
         urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        fetchResources(request: urlreq, completion: result)
+        fetchResources(request: urlreq, result: result)
     }
     
     /// Fetch the users top artists from Spotify given the parameters
@@ -460,7 +460,7 @@ extension SpotifyService {
         if let url = url {
             var request = URLRequest(url: url)
             request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            fetchResources(request: request, completion: result)
+            fetchResources(request: request, result: result)
             return
         }
         
@@ -478,12 +478,12 @@ extension SpotifyService {
         }
         var urlreq = URLRequest(url: finURL)
         urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        fetchResources(request: urlreq, completion: result)
+        fetchResources(request: urlreq, result: result)
     }
     
     private func getTracksForPlaylist(_ playlistId: String, url: URL?, result: @escaping (Result<PagingObject<PlaylistTrack>, APIServiceError>) -> Void) {
         if let url = url {
-            fetchResources(request: URLRequest(url: url), completion: result)
+            fetchResources(request: URLRequest(url: url), result: result)
             return
         }
         
@@ -495,6 +495,6 @@ extension SpotifyService {
         }
         var urlreq = URLRequest(url: finURL)
         urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        fetchResources(request: urlreq, completion: result)
+        fetchResources(request: urlreq, result: result)
     }
 }
