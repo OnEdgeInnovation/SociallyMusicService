@@ -10,7 +10,7 @@ import Foundation
 
 public class MusicService {
     
-    private let urlSession = URLSession.shared
+    let urlSession = URLSession.shared
     
     private let jsonDecoder: JSONDecoder = {
         let jsonDecoder = JSONDecoder()

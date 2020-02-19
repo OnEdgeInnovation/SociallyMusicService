@@ -54,7 +54,7 @@ You can view an entire demo project [Here.](https://github.com/OnEdgeInnovation/
 
 ## Spotify Usage
 Spotify will require some setup beforehand. Here's some info in regards to their [API.](https://developer.spotify.com/documentation/web-api/)
-For just small testing you can request a temporary token from their side (these expire every 60 minutes). If you would like to expand this and allow for user's to sign into your app with their spotify and authorize you to get them tokens, you will need to register your app under their developer site and follow their guidelines.
+For just small testing you can request a temporary token from their site (these expire every 60 minutes). If you would like to expand this and allow for user's to sign into your app with their spotify and authorize you to get their tokens, you will need to register your app under their developer site and follow their guidelines.
 
 ## Apple Music Usage
 Apple Music will also require some setup beforehand. Here's some info in regards to their [API.](https://developer.apple.com/documentation/applemusicapi/)
