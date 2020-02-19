@@ -34,10 +34,10 @@ public class SpotifyService: MusicService {
     ///   - clientID: The application's client id
     ///   - clientSecret: The application's client id
     ///   - completion: completion handler returning the token object or error
-    public func authRequest(code: String, redirectURL: URL, clientID: String, clientSecret: String, completion: @escaping (Result<TokenObject, APIServiceError>) -> Void) {
+    public func authRequest(code: String, redirectURL: URL, clientID: String, clientSecret: String, result: @escaping (Result<TokenObject, APIServiceError>) -> Void) {
         let requestBody = "code=\(code)&grant_type=authorization_code&redirect_uri=\(redirectURL.absoluteString)"
         guard let authString = "\(clientID):\(clientSecret)".data(using: .ascii)?.base64EncodedString(options: .endLineWithLineFeed) else {
-            completion(.failure(.invalidCompiledURL))
+            result(.failure(.invalidCompiledURL))
             return
         }
         let endpoint = URL(string: "https://accounts.spotify.com/api/token")!
@@ -52,9 +52,9 @@ public class SpotifyService: MusicService {
         let task = URLSession.shared.dataTask(with: urlRequest, completionHandler: { (data, _, error) in
             if let data = data,
                 let authResponse = try? JSONDecoder().decode(TokenObject.self, from: data), error == nil {
-                completion(.success(authResponse))
+                result(.success(authResponse))
             } else {
-                completion(.failure(.apiError))
+                result(.failure(.apiError))
             }
         })
         task.resume()
@@ -64,8 +64,8 @@ public class SpotifyService: MusicService {
     /// - Parameters:
     ///   - refreshToken: the refresh token for the user
     ///   - clientSecretEncrypted: the encrypted client secret
-    ///   - completion: completion handler returning the token object or error
-    public func updateToken(refreshToken: String, clientSecretEncrypted: String, completion: @escaping (Result<String, APIServiceError>) -> Void) {
+    ///   - result: completion handler returning the token object or error
+    public func updateToken(refreshToken: String, clientSecretEncrypted: String, result: @escaping (Result<String, APIServiceError>) -> Void) {
         var url = URLComponents(string: "https://accounts.spotify.com/api/token")
         //Add body
         let params: [URLQueryItem] = [
@@ -80,23 +80,23 @@ public class SpotifyService: MusicService {
         urlreq.httpMethod = "POST"
         
         //Make call
-        urlSession.dataTask(with: urlreq) { (result: Result<(URLResponse, Data), Error> ) in
-            switch result {
+        urlSession.dataTask(with: urlreq) { (resultVal: Result<(URLResponse, Data), Error> ) in
+            switch resultVal {
             case .success(let (response, data)):
                 guard let statusCode = (response as? HTTPURLResponse)?.statusCode, 200..<299 ~= statusCode else {
-                    completion(.failure(.apiError))
+                    result(.failure(.apiError))
                     return
                 }
                 do {
                     let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
                     guard let token = json?["access_token"] as? String else {
-                        completion(.failure(.apiError))
+                        result(.failure(.apiError))
                         return
                     }
-                    completion(.success(token))
+                    result(.success(token))
                 }
             case .failure:
-                completion(.failure(.apiError))
+                result(.failure(.apiError))
             }
         }.resume()
     }
@@ -136,7 +136,7 @@ public class SpotifyService: MusicService {
     ///   - limit: How many playlists to get, default of 20, max of 50
     ///   - offset: Where to start the playlist count
     ///   - result: The completion handler
-    func getUserPlaylists(of userId: String, limit: Int = 20, offset: Int = 0, completion: @escaping (Result<[SociallyPlaylist], APIServiceError>) -> Void) {
+    func getUserPlaylists(of userId: String, limit: Int = 20, offset: Int = 0, result: @escaping (Result<[SociallyPlaylist], APIServiceError>) -> Void) {
         let params: [URLQueryItem] = [
             URLQueryItem(name: "limit", value: "\(limit)"),
             URLQueryItem(name: "offset", value: "\(offset)")
@@ -145,16 +145,16 @@ public class SpotifyService: MusicService {
         component?.queryItems = params
         
         guard let finURL = component?.url else {
-            completion(.failure(.invalidCompiledURL))
+            result(.failure(.invalidCompiledURL))
             return
         }
         let urlreq = URLRequest(url: finURL)
-        fetchResources(request: urlreq) { (result: Result<PagingObject<Playlist>, APIServiceError>) in
-            switch result {
+        fetchResources(request: urlreq) { (resultVal: Result<PagingObject<Playlist>, APIServiceError>) in
+            switch resultVal {
             case .failure(let err):
-                completion(.failure(err))
+                result(.failure(err))
             case .success(let pagingObject):
-                completion(.success(pagingObject.items.map({SociallyPlaylist(from: $0)})))
+                result(.success(pagingObject.items.map({SociallyPlaylist(from: $0)})))
             }
         }
     }
@@ -210,8 +210,8 @@ public class SpotifyService: MusicService {
     ///   - limit: How many tracks to fetch
     ///   - offset: The offset from the beginning
     ///   - timeRange: How long of time to consider
-    ///   - completion: completion handler returning the result
-    public func fetchTopArtists(limit: Int = 20, offset: Int = 0, timeRange: TimeRange = .longTerm, completion: @escaping (Result<[SociallyArtist], APIServiceError>) -> Void) {
+    ///   - result: completion handler returning the result
+    public func fetchTopArtists(limit: Int = 20, offset: Int = 0, timeRange: TimeRange = .longTerm, result: @escaping (Result<[SociallyArtist], APIServiceError>) -> Void) {
         
         let params: [URLQueryItem] = [
             URLQueryItem(name: "limit", value: "\(limit)"),
@@ -222,17 +222,17 @@ public class SpotifyService: MusicService {
         component?.queryItems = params
         
         guard let finURL = component?.url else {
-            completion(.failure(.invalidCompiledURL))
+            result(.failure(.invalidCompiledURL))
             return
         }
         var urlreq = URLRequest(url: finURL)
         urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        fetchResources(request: urlreq) { (result: Result<PagingObject<Artist>, APIServiceError>) in
-            switch result {
+        fetchResources(request: urlreq) { (resultVal: Result<PagingObject<Artist>, APIServiceError>) in
+            switch resultVal {
             case .failure(let err):
-                print("Failed getting results \(err)")
+                result(.failure(err))
             case .success(let pagingObject):
-                completion(.success(pagingObject.items.map({SociallyArtist(from: $0)})))
+                result(.success(pagingObject.items.map({SociallyArtist(from: $0)})))
             }
         }
     }
@@ -242,8 +242,8 @@ public class SpotifyService: MusicService {
     ///   - limit: How many tracks to fetch
     ///   - offset: The offset from the beginning
     ///   - timeRange: How long of time to consider
-    ///   - completion: completion handler returning the result
-    public func fetchTopSongs(limit: Int = 20, offset: Int = 0, timeRange: TimeRange = .mediumTerm, completion: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
+    ///   - result: completion handler returning the result
+    public func fetchTopSongs(limit: Int = 20, offset: Int = 0, timeRange: TimeRange = .mediumTerm, result: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
         let params: [URLQueryItem] = [
             URLQueryItem(name: "limit", value: "\(limit)"),
             URLQueryItem(name: "offset", value: "\(offset)"),
@@ -254,25 +254,25 @@ public class SpotifyService: MusicService {
         component?.queryItems = params
         
         guard let finURL = component?.url else {
-            completion(.failure(.invalidCompiledURL))
+            result(.failure(.invalidCompiledURL))
             return
         }
         var urlreq = URLRequest(url: finURL)
         urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        fetchResources(request: urlreq) { (result: Result<PagingObject<TrackItem>, APIServiceError>) in
-            switch result {
+        fetchResources(request: urlreq) { (resultVal: Result<PagingObject<TrackItem>, APIServiceError>) in
+            switch resultVal {
             case .failure(let err):
-                print("Failed getting results \(err)")
+                result(.failure(err))
             case .success(let pagingObject):
-                completion(.success(pagingObject.items.map({SociallyTrack(from: $0)})))
+                result(.success(pagingObject.items.map({SociallyTrack(from: $0)})))
             }
         }
     }
     
     /// Fetches the last 10 played tracks for the user
     /// - Parameters:
-    ///   - completion: completion handler returning the result
-    public func fetchRecentlyPlayed(completion: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
+    ///   - result: completion handler returning the result
+    public func fetchRecentlyPlayed(result: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
         
         let limit = 10
         let params: [URLQueryItem] = [
@@ -283,23 +283,23 @@ public class SpotifyService: MusicService {
         component?.queryItems = params
         
         guard let finURL = component?.url else {
-            completion(.failure(.invalidCompiledURL))
+            result(.failure(.invalidCompiledURL))
             return
         }
         var urlreq = URLRequest(url: finURL)
         urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        fetchResources(request: urlreq) { (result: Result<PagingObject<PlayHistoryObject>, APIServiceError>) in
-            switch result {
+        fetchResources(request: urlreq) { (resultVal: Result<PagingObject<PlayHistoryObject>, APIServiceError>) in
+            switch resultVal {
             case .failure(let error):
-                completion(.failure(error))
+                result(.failure(error))
             case .success(let pagingObject):
                 let ids = pagingObject.items.map { $0.track.id }
                 self.getMultipleTracksInfo(ids: ids) { (tracks) in
                     switch tracks {
                     case .success(let trackList):
-                        completion(.success(trackList))
+                        result(.success(trackList))
                     case .failure(let error):
-                        completion(.failure(error))
+                        result(.failure(error))
                     }
                 }
             }
@@ -308,36 +308,36 @@ public class SpotifyService: MusicService {
     
     /// Fetches track the current user is listening to
     /// - Parameter completion: completion handler returning the result
-    public func fetchCurrentTrack(completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
+    public func fetchCurrentTrack(result: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
         //Get proper URL
         let url = baseURL.appendingPathComponent("me/player/currently-playing")
         var request = URLRequest(url: url)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         //Make the call
-        fetchResources(request: request) { (result: Result<TrackResult, APIServiceError>) in
-            switch result {
+        fetchResources(request: request) { (resultVal: Result<TrackResult, APIServiceError>) in
+            switch resultVal {
             case .success(let trackResult):
                 let track = SociallyTrack(album: trackResult.item.album.name, artist: trackResult.item.artists[0].name, name: trackResult.item.name, isrc: trackResult.item.externalIds?.isrc ?? "", context: trackResult.item.uri, imageURL: trackResult.item.album.images?[0].url.absoluteString ?? "")
-                completion(.success(track))
+                result(.success(track))
             case .failure(let error):
-                completion(.failure(error))
+                result(.failure(error))
             }
         }
     }
     
     /// Fetches the Spotify user for the current token
-    /// - Parameter completion: completion handler for this call
-    public func fetchCurrentUserId(completion: @escaping (String) -> Void) {
+    /// - Parameter result: completion handler for this call
+    public func fetchCurrentUserId(result: @escaping (Result<String, APIServiceError>) -> Void) {
         //Get proper URL
         let url = baseURL.appendingPathComponent("me")
         let request = URLRequest(url: url)
         //Make the call
-        fetchResources(request: request) { (result: Result<UserResult, APIServiceError>) in
-            switch result {
+        fetchResources(request: request) { (resultVal: Result<UserResult, APIServiceError>) in
+            switch resultVal {
             case .success(let user):
-                completion(user.id)
+                result(.success(user.id))
             case .failure(let error):
-                print(error.localizedDescription)
+                result(.failure(error))
             }
         }
     }
@@ -345,8 +345,8 @@ public class SpotifyService: MusicService {
     /// Takes an ISRC and returns back the track information
     /// - Parameters:
     ///   - isrc: the ISRC for a track
-    ///   - completion: completion handler returning the contextt
-    public func searchByISRC(isrc: String, completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
+    ///   - result: completion handler returning the contextt
+    public func searchByISRC(isrc: String, result: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
         var component = URLComponents(string: baseURL.appendingPathComponent("search").absoluteString)
         
         component?.queryItems = [
@@ -358,12 +358,12 @@ public class SpotifyService: MusicService {
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        fetchResources(request: request) { (result: Result<TrackPagingObject<TrackItem>, APIServiceError>) in
-            switch result {
+        fetchResources(request: request) { (resultVal: Result<TrackPagingObject<TrackItem>, APIServiceError>) in
+            switch resultVal {
             case .success(let pagingObj):
-                completion(.success(SociallyTrack(from: pagingObj.tracks.items[0])))
+                result(.success(SociallyTrack(from: pagingObj.tracks.items[0])))
             case .failure(let error):
-                completion(.failure(error))
+                result(.failure(error))
             }
         }
     }
@@ -371,8 +371,8 @@ public class SpotifyService: MusicService {
     /// Takes an id and returns back the Spotify context for that track
     /// - Parameters:
     ///   - ids: the array of ids you'd like to get info on
-    ///   - completion: completion handler returning the contextt
-    public func getMultipleTracksInfo(ids: [String], completion: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
+    ///   - result: completion handler returning the contextt
+    public func getMultipleTracksInfo(ids: [String], result: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
         
         var component = URLComponents(string: baseURL.appendingPathComponent("tracks").absoluteString)
         
@@ -384,12 +384,12 @@ public class SpotifyService: MusicService {
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        fetchResources(request: request) { (result: Result<TrackItemList, APIServiceError>) in
-            switch result {
+        fetchResources(request: request) { (resultVal: Result<TrackItemList, APIServiceError>) in
+            switch resultVal {
             case .success(let list):
-                completion(.success(list.tracks.map({SociallyTrack(from: $0)})))
+                result(.success(list.tracks.map({SociallyTrack(from: $0)})))
             case .failure(let error):
-                completion(.failure(error))
+                result(.failure(error))
             }
         }
     }
@@ -397,24 +397,24 @@ public class SpotifyService: MusicService {
     /// Takes an id and returns back the Spotify context for that track
     /// - Parameters:
     ///   - id: the id for a track
-    ///   - completion: completion handler returning the contextt
-    public func getTrackInfo(id: String, completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
+    ///   - result: completion handler returning the contextt
+    public func getTrackInfo(id: String, result: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
         
         let component = URLComponents(string: baseURL.appendingPathComponent("tracks/\(id)").absoluteString)
         
         guard let finURL = component?.url else {
-            completion(.failure(.invalidCompiledURL))
+            result(.failure(.invalidCompiledURL))
             return
         }
         
         var request = URLRequest(url: finURL)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        fetchResources(request: request) { (result: Result<TrackItem, APIServiceError>) in
-            switch result {
+        fetchResources(request: request) { (resultVal: Result<TrackItem, APIServiceError>) in
+            switch resultVal {
             case .success(let track):
-                completion(.success(SociallyTrack(from: track)))
+                result(.success(SociallyTrack(from: track)))
             case .failure(let error):
-                completion(.failure(error))
+                result(.failure(error))
             }
         }
     }
