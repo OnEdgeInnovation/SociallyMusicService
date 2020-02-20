@@ -10,7 +10,7 @@ import Foundation
 
 public class MusicService {
     
-    private let urlSession = URLSession.shared
+    let urlSession = URLSession.shared
     
     private let jsonDecoder: JSONDecoder = {
         let jsonDecoder = JSONDecoder()
@@ -18,25 +18,23 @@ public class MusicService {
         return jsonDecoder
     }()
     
-    func fetchResources<T: Decodable>(request: URLRequest, completion: @escaping (Result<T, APIServiceError>) -> Void) {
+    func fetchResources<T: Decodable>(request: URLRequest, result: @escaping (Result<T, APIServiceError>) -> Void) {
         //Make call
-        urlSession.dataTask(with: request) { (result: Result<(URLResponse, Data), Error> ) in
-            switch result {
+        urlSession.dataTask(with: request) { (resultVal: Result<(URLResponse, Data), Error> ) in
+            switch resultVal {
             case .success(let (response, data)):
                 guard let statusCode = (response as? HTTPURLResponse)?.statusCode, 200..<299 ~= statusCode else {
-                    print(response)
-                    completion(.failure(.invalidResponse))
+                    result(.failure(.invalidResponse))
                     return
                 }
                 do {
                     let values = try self.jsonDecoder.decode(T.self, from: data)
-                    completion(.success(values))
-                } catch let error {
-                    print(error)
-                    completion(.failure(.decodeError))
+                    result(.success(values))
+                } catch {
+                    result(.failure(.decodeError))
                 }
             case .failure:
-                completion(.failure(.apiError))
+                result(.failure(.apiError))
             }
         }.resume()
     }

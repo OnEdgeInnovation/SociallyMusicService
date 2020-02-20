@@ -119,3 +119,16 @@ struct PlayHistoryObject: Codable {
 struct PlaylistTrack: Codable {
     let track: TrackItem?
 }
+
+public struct TokenObject: Codable {
+
+    enum CodingKeys: String, CodingKey {
+        case accessToken = "access_token"
+        case expiresIn = "expires_in"
+        case refreshToken = "refresh_token"
+    }
+
+    public let accessToken: String
+    public let expiresIn: Double
+    public let refreshToken: String
+}
