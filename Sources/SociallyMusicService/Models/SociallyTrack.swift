@@ -26,6 +26,23 @@ public struct SociallyTrack: Codable {
         self.imageURL = imageURL
     }
     
+    public init?(with data: [String: Any]) {
+        guard let album = data["album"] as? String,
+            let artist = data["artist"] as? String,
+            let name = data["name"] as? String,
+            let isrc = data["isrc"] as? String,
+            let context = data["context"] as? String,
+            let imageURL = data["imageURL"] as? String
+            else { return nil }
+        
+        self.album = album
+        self.artist = artist
+        self.name = name
+        self.isrc = isrc
+        self.context = context
+        self.imageURL = imageURL
+    }
+    
     init(from track: TrackItem) {
         self.album = track.album.name
         if !track.artists.isEmpty {
