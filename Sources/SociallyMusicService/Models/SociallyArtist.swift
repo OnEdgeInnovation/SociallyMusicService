@@ -36,4 +36,13 @@ public struct SociallyArtist: Codable {
         self.id = artist.id
         self.imageURL = artist.images[0].url.absoluteString
     }
+    
+    //Converting to JSON representation
+    public var jsonRepresentation: [String: String] {
+        return [
+            "album": name,
+            "artist": id,
+            "name": imageURL
+        ]
+    }
 }

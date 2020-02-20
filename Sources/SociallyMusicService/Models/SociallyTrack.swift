@@ -55,4 +55,16 @@ public struct SociallyTrack: Codable {
         self.imageURL = track.album.images?[0].url.absoluteString ?? ""
         self.isrc = track.externalIds?.isrc ?? ""
     }
+    
+    //Converting to JSON representation
+    public var jsonRepresentation: [String: String] {
+        return [
+            "album": album,
+            "artist": artist,
+            "name": name,
+            "isrc": isrc,
+            "context": context,
+            "imageURL": imageURL
+        ]
+    }
 }
