@@ -128,7 +128,7 @@ public struct TokenObject: Codable {
         case refreshToken = "refresh_token"
     }
 
-    let accessToken: String
-    let expiresIn: Double
-    let refreshToken: String
+    public let accessToken: String
+    public let expiresIn: Double
+    public let refreshToken: String
 }
