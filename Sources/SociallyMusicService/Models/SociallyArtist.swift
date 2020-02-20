@@ -13,6 +13,12 @@ public struct SociallyArtist: Codable {
     public let id: String
     public let imageURL: String
     
+    public init(name: String, id: String, imageURL: String) {
+        self.name = name
+        self.id = id
+        self.imageURL = imageURL
+    }
+    
     init(from artist: Artist) {
         self.name = artist.name
         self.id = artist.id
