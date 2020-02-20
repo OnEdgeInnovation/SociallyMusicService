@@ -12,7 +12,7 @@ public struct SociallyArtist: Codable {
     public let name: String
     public let imageURL: String
     
-    init(from artist: Artist) {
+    public init(from artist: Artist) {
         self.name = artist.name
         self.imageURL = artist.images[0].url.absoluteString
     }
