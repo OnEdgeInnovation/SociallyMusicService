@@ -17,7 +17,7 @@ public struct SociallyTrack: Codable {
     public let context: String
     public let imageURL: String
     
-    init(album: String, artist: String, name: String, isrc: String, context: String, imageURL: String) {
+    public init(album: String, artist: String, name: String, isrc: String, context: String, imageURL: String) {
         self.album = album
         self.artist = artist
         self.name = name
