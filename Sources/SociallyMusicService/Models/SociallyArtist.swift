@@ -40,9 +40,9 @@ public struct SociallyArtist: Codable {
     //Converting to JSON representation
     public var jsonRepresentation: [String: String] {
         return [
-            "album": name,
-            "artist": id,
-            "name": imageURL
+            "name": name,
+            "id": id,
+            "imageURL": imageURL
         ]
     }
 }
