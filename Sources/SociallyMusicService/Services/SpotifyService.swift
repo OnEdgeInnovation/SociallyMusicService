@@ -12,14 +12,10 @@ import Foundation
 public class SpotifyService: MusicService {
     
     private let baseURL = URL(string: "https://api.spotify.com/v1/")!
-    private var token: String
+    private var token: String?
     
     /// Initializer for the Spotify Service
-    /// - Parameters:
-    ///   - token: The token of the main user
-    public init(token: String) {
-        self.token = token
-    }
+    public override init() {}
     
     /// Sets the token to the new access token give
     /// - Parameter accessToken: The new token value to update to
@@ -137,6 +133,11 @@ public class SpotifyService: MusicService {
     ///   - offset: Where to start the playlist count
     ///   - result: The completion handler
     func getUserPlaylists(of userId: String, limit: Int = 20, offset: Int = 0, result: @escaping (Result<[SociallyPlaylist], APIServiceError>) -> Void) {
+        guard let token = token else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        
         let params: [URLQueryItem] = [
             URLQueryItem(name: "limit", value: "\(limit)"),
             URLQueryItem(name: "offset", value: "\(offset)")
@@ -148,7 +149,8 @@ public class SpotifyService: MusicService {
             result(.failure(.invalidCompiledURL))
             return
         }
-        let urlreq = URLRequest(url: finURL)
+        var urlreq = URLRequest(url: finURL)
+        urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         fetchResources(request: urlreq) { (resultVal: Result<PagingObject<Playlist>, APIServiceError>) in
             switch resultVal {
             case .failure(let err):
@@ -165,6 +167,11 @@ public class SpotifyService: MusicService {
     ///   - track: the track context ot be added
     ///   - result: completion handler returning the result
     public func addToPlaylist(playlistId: String, track: String, result: @escaping (Result<[String: String], APIServiceError>) -> Void) {
+        guard let token = token else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        
         let params: [URLQueryItem] = [
             URLQueryItem(name: "uris", value: "\(track)")
         ]
@@ -189,6 +196,11 @@ public class SpotifyService: MusicService {
     ///   - trackId: The id of the track
     ///   - result: completion handler returning the result
     public func deleteFromPlaylist(_ playlistId: String, trackId: String, result: @escaping (Result<[String: String], APIServiceError>) -> Void) {
+        guard let token = token else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        
         let params: [URLQueryItem] = [
             URLQueryItem(name: "tracks", value: "\([["uri": trackId]])")
         ]
@@ -212,6 +224,10 @@ public class SpotifyService: MusicService {
     ///   - timeRange: How long of time to consider
     ///   - result: completion handler returning the result
     public func fetchTopArtists(limit: Int = 20, offset: Int = 0, timeRange: TimeRange = .longTerm, result: @escaping (Result<[SociallyArtist], APIServiceError>) -> Void) {
+        guard let token = token else {
+            result(.failure(.tokenNilError))
+            return
+        }
         
         let params: [URLQueryItem] = [
             URLQueryItem(name: "limit", value: "\(limit)"),
@@ -244,6 +260,11 @@ public class SpotifyService: MusicService {
     ///   - timeRange: How long of time to consider
     ///   - result: completion handler returning the result
     public func fetchTopSongs(limit: Int = 20, offset: Int = 0, timeRange: TimeRange = .mediumTerm, result: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
+        guard let token = token else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        
         let params: [URLQueryItem] = [
             URLQueryItem(name: "limit", value: "\(limit)"),
             URLQueryItem(name: "offset", value: "\(offset)"),
@@ -273,6 +294,10 @@ public class SpotifyService: MusicService {
     /// - Parameters:
     ///   - result: completion handler returning the result
     public func fetchRecentlyPlayed(result: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
+        guard let token = token else {
+            result(.failure(.tokenNilError))
+            return
+        }
         
         let limit = 10
         let params: [URLQueryItem] = [
@@ -309,6 +334,11 @@ public class SpotifyService: MusicService {
     /// Fetches track the current user is listening to
     /// - Parameter completion: completion handler returning the result
     public func fetchCurrentTrack(result: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
+        guard let token = token else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        
         //Get proper URL
         let url = baseURL.appendingPathComponent("me/player/currently-playing")
         var request = URLRequest(url: url)
@@ -328,9 +358,15 @@ public class SpotifyService: MusicService {
     /// Fetches the Spotify user for the current token
     /// - Parameter result: completion handler for this call
     public func fetchCurrentUserId(result: @escaping (Result<String, APIServiceError>) -> Void) {
+        guard let token = token else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        
         //Get proper URL
         let url = baseURL.appendingPathComponent("me")
-        let request = URLRequest(url: url)
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         //Make the call
         fetchResources(request: request) { (resultVal: Result<UserResult, APIServiceError>) in
             switch resultVal {
@@ -347,6 +383,11 @@ public class SpotifyService: MusicService {
     ///   - isrc: the ISRC for a track
     ///   - result: completion handler returning the contextt
     public func searchByISRC(isrc: String, result: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
+        guard let token = token else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        
         var component = URLComponents(string: baseURL.appendingPathComponent("search").absoluteString)
         
         component?.queryItems = [
@@ -373,6 +414,10 @@ public class SpotifyService: MusicService {
     ///   - ids: the array of ids you'd like to get info on
     ///   - result: completion handler returning the contextt
     public func getMultipleTracksInfo(ids: [String], result: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
+        guard let token = token else {
+            result(.failure(.tokenNilError))
+            return
+        }
         
         var component = URLComponents(string: baseURL.appendingPathComponent("tracks").absoluteString)
         
@@ -399,6 +444,10 @@ public class SpotifyService: MusicService {
     ///   - id: the id for a track
     ///   - result: completion handler returning the context
     public func getTrackInfo(id: String, result: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
+        guard let token = token else {
+            result(.failure(.tokenNilError))
+            return
+        }
         
         let component = URLComponents(string: baseURL.appendingPathComponent("tracks/\(id)").absoluteString)
         
@@ -456,6 +505,10 @@ public class SpotifyService: MusicService {
 extension SpotifyService {
     
     private func getMyPlaylists(limit: Int = 50, offset: Int = 0, url: URL? = nil, result: @escaping (Result<PagingObject<Playlist>, APIServiceError>) -> Void) {
+        guard let token = token else {
+            result(.failure(.tokenNilError))
+            return
+        }
         
         if let url = url {
             var request = URLRequest(url: url)
@@ -482,6 +535,11 @@ extension SpotifyService {
     }
     
     private func getTracksForPlaylist(_ playlistId: String, url: URL?, result: @escaping (Result<PagingObject<PlaylistTrack>, APIServiceError>) -> Void) {
+        guard let token = token else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        
         if let url = url {
             fetchResources(request: URLRequest(url: url), result: result)
             return

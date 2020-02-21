@@ -13,10 +13,17 @@ public class AppleMusicService: MusicService {
     
     private let baseURL = URL(string: "https://api.music.apple.com/v1/")!
     
-    private var userToken: String
-    private var devToken: String
+    private var userToken: String?
+    private var devToken: String?
     
-    public init(devToken: String, userToken: String = "") {
+    /// Public initializer for Apple Music Service
+    public override init() {}
+    
+    /// Sets the tokens for usage in requests
+    /// - Parameters:
+    ///   - devToken: the applications dev token
+    ///   - userToken: the user using the app's token
+    public func setToken(devToken: String, userToken: String = "") {
         self.devToken = devToken
         self.userToken = userToken
     }
@@ -24,6 +31,10 @@ public class AppleMusicService: MusicService {
     /// Returns the playlists for the current token
     /// - Parameter result: completion handler returning the array of playlists or error
     public func getPlaylists(result: @escaping (Result<[SociallyPlaylist], APIServiceError>) -> Void) {
+        guard let devToken = devToken else {
+            result(.failure(.tokenNilError))
+            return
+        }
         
         var component = URLComponents(string: baseURL.appendingPathComponent("me/library/playlists").absoluteString)
         
@@ -57,6 +68,10 @@ public class AppleMusicService: MusicService {
     ///   - track: the track context ot be added
     ///   - result: completion handler returning the result
     public func addToPlaylist(playlistId: String, track: String, result: @escaping (Result<[String: String], APIServiceError>) -> Void) {
+        guard let devToken = devToken, let userToken = userToken else {
+            result(.failure(.tokenNilError))
+            return
+        }
         
         let component = URLComponents(string: baseURL.appendingPathComponent("me/library/playlists/\(playlistId)/tracks").absoluteString)
         
@@ -91,6 +106,11 @@ public class AppleMusicService: MusicService {
     ///   - isrc: the ISRC for a track
     ///   - result: completion handler returning the contextt
     public func searchByISRC(isrc: String, countryCode: String = "us", result: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
+        guard let devToken = devToken else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        
         var component = URLComponents(string: baseURL.appendingPathComponent("catalog/\(countryCode)/songs").absoluteString)
         
         component?.queryItems = [
@@ -122,7 +142,11 @@ public class AppleMusicService: MusicService {
     /// - Parameters:
     ///   - playlist: the playlist to fetch tracks for
     ///   - result: the completion handler containing the result of tracks or error
-    public func getAllTracksForPlaylist(playlist: String, result: @escaping (Result<[SociallyTrack], Error>) -> Void) {
+    public func getAllTracksForPlaylist(playlist: String, result: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
+        guard let devToken = devToken else {
+            result(.failure(.tokenNilError))
+            return
+        }
         
         let component = URLComponents(string: baseURL.appendingPathComponent("me/library/playlists/\(playlist)/tracks").absoluteString)
         
@@ -136,7 +160,7 @@ public class AppleMusicService: MusicService {
             switch resultVal {
             case .success(let playlist):
                 guard !(playlist.data?.isEmpty ?? true), let tracks = playlist.data else {
-                    result(.failure(APIServiceError.noData))
+                    result(.failure(.noData))
                     return
                 }
                 
@@ -151,7 +175,7 @@ public class AppleMusicService: MusicService {
                 
                 result(.success(SociallyTracks))
             case .failure:
-                result(.failure(APIServiceError.apiError))
+                result(.failure(.apiError))
             }
         }
     }
@@ -161,6 +185,11 @@ public class AppleMusicService: MusicService {
     ///   - id: the id for a track
     ///   - result: completion handler returning the context
     public func getTrackInfo(id: String, result: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
+        guard let devToken = devToken else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        
         let countryCode = "us"
         let component = URLComponents(string: baseURL.appendingPathComponent("catalog/\(countryCode)/songs/\(id)").absoluteString)
         
