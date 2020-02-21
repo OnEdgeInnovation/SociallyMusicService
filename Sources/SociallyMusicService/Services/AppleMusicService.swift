@@ -169,19 +169,19 @@ public class AppleMusicService: MusicService {
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
         
-        fetchResources(request: request) { (result: Result<ResponseRoot<Track>, APIServiceError>) in
-            switch result {
+        fetchResources(request: request) { (resultVal: Result<ResponseRoot<Track>, APIServiceError>) in
+            switch resultVal {
             case .success(let track):
                 guard let trackAttributes = track.data?[0].attributes else {
-                    completion(.failure(.apiError))
+                    result(.failure(.apiError))
                     return
                 }
                 var imageURL = trackAttributes.artwork.url
                 imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
                 let sociallyTrack = SociallyTrack(album: trackAttributes.albumName, artist: trackAttributes.artistName, name: trackAttributes.name, isrc: trackAttributes.isrc, context: id, imageURL: imageURL)
-                completion(.success(sociallyTrack))
+                result(.success(sociallyTrack))
             case .failure:
-                completion(.failure(.apiError))
+                result(.failure(.apiError))
             }
         }
     }
