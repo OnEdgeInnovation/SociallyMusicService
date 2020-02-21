@@ -160,7 +160,7 @@ public class AppleMusicService: MusicService {
     /// - Parameters:
     ///   - id: the id for a track
     ///   - result: completion handler returning the context
-    public func getTrackInfo(id: String, completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
+    public func getTrackInfo(id: String, result: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
         let countryCode = "us"
         let component = URLComponents(string: baseURL.appendingPathComponent("catalog/\(countryCode)/songs/\(id)").absoluteString)
         
