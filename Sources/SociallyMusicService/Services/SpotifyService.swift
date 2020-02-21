@@ -397,7 +397,7 @@ public class SpotifyService: MusicService {
     /// Takes an id and returns back the Spotify context for that track
     /// - Parameters:
     ///   - id: the id for a track
-    ///   - result: completion handler returning the contextt
+    ///   - result: completion handler returning the context
     public func getTrackInfo(id: String, result: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
         
         let component = URLComponents(string: baseURL.appendingPathComponent("tracks/\(id)").absoluteString)

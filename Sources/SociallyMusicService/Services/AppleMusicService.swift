@@ -21,13 +21,6 @@ public class AppleMusicService: MusicService {
         self.userToken = userToken
     }
     
-    /// Fetches track the current user is listening to
-    /// - Parameter result: completion handler returning the result
-    public func fetchCurrentTrack(result: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
-        let track = ""
-        fetchSongByIdentifier(identifier: track, completion: result)
-    }
-    
     /// Returns the playlists for the current token
     /// - Parameter result: completion handler returning the array of playlists or error
     public func getPlaylists(result: @escaping (Result<[SociallyPlaylist], APIServiceError>) -> Void) {
@@ -162,14 +155,14 @@ public class AppleMusicService: MusicService {
             }
         }
     }
-}
-
-//MARK: Helper Functions
-extension AppleMusicService {
     
-    private func fetchSongByIdentifier(identifier: String, completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
+    /// Takes an id and returns back the Apple Music context for that track
+    /// - Parameters:
+    ///   - id: the id for a track
+    ///   - result: completion handler returning the context
+    public func getTrackInfo(id: String, completion: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
         let countryCode = "us"
-        let component = URLComponents(string: baseURL.appendingPathComponent("catalog/\(countryCode)/songs/\(identifier)").absoluteString)
+        let component = URLComponents(string: baseURL.appendingPathComponent("catalog/\(countryCode)/songs/\(id)").absoluteString)
         
         guard let url = component?.url else { return }
         
@@ -185,7 +178,7 @@ extension AppleMusicService {
                 }
                 var imageURL = trackAttributes.artwork.url
                 imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
-                let sociallyTrack = SociallyTrack(album: trackAttributes.albumName, artist: trackAttributes.artistName, name: trackAttributes.name, isrc: trackAttributes.isrc, context: identifier, imageURL: imageURL)
+                let sociallyTrack = SociallyTrack(album: trackAttributes.albumName, artist: trackAttributes.artistName, name: trackAttributes.name, isrc: trackAttributes.isrc, context: id, imageURL: imageURL)
                 completion(.success(sociallyTrack))
             case .failure:
                 completion(.failure(.apiError))
