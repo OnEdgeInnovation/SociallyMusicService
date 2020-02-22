@@ -34,7 +34,11 @@ public struct SociallyPlaylist: Codable {
         self.playlistId = playlist.id
         self.name = playlist.attributes?.name ?? ""
         self.authorName = ""
-        self.imageURL = nil
+        if let urlStr = playlist.attributes?.artwork?.url {
+            self.imageURL = URL(string: urlStr)
+        } else {
+            imageURL = nil
+        }
         self.description = playlist.attributes?.description?.standard ?? ""
         self.authorId = ""
         self.playlistUri = ""

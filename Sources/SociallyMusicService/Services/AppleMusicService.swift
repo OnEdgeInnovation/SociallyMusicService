@@ -164,16 +164,15 @@ public class AppleMusicService: MusicService {
                     return
                 }
                 
-                let sociallyTracks: [SociallyTrack] = tracks.compactMap { (track) -> SociallyTrack? in
-                    guard let attributes = track.attributes else { return nil }
-                    var imageURL = attributes.artwork.url
-                    imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
-                     
-                    let sociallyTrack = SociallyTrack(album: attributes.albumName, artist: attributes.artistName, name: attributes.name, isrc: "", context: attributes.playParams.id, imageURL: attributes.artwork.url)
-                    return sociallyTrack
+                let ids: [String] = tracks.map { (song) -> String in
+                    //removal of the a. so the songid is returned
+                    let trackIdIdx = song.id.index(song.id.startIndex, offsetBy: 2)
+                    let id = song.id.suffix(from: trackIdIdx)
+                    return String(id)
                 }
                 
-                result(.success(sociallyTracks))
+                self.getCatalogSongs(songIds: ids, result: result)
+
             case .failure:
                 result(.failure(APIServiceError.apiError))
             }
@@ -213,5 +212,47 @@ public class AppleMusicService: MusicService {
                 result(.failure(.apiError))
             }
         }
+    }
+}
+
+extension AppleMusicService {
+    /// Fetch tracks for a given playlist
+    /// - Parameters:
+    ///   - songIds: song ids of of the songs you want to retrieve
+    ///   - result: the completion handler containing the result of tracks or error
+    private func getCatalogSongs(songIds: [String], result: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
+       guard let devToken = devToken else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        var component = URLComponents(string: baseURL.appendingPathComponent("catalog/us/songs").absoluteString)
+        component?.queryItems = [
+            URLQueryItem(name: "ids", value: songIds.joined(separator: ","))
+        ]
+
+        guard let url = component?.url else { return }
+
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
+
+        fetchResources(request: request) { (resultVal: Result<ResponseRoot<Song>, APIServiceError>) in
+            switch resultVal {
+            case .success(let songs):
+                guard let tracks = songs.data, !tracks.isEmpty else {
+                    result(.failure(.noData))
+                    return
+                }
+                let retVal = tracks.compactMap { (song) -> SociallyTrack? in
+                    guard let attributes = song.attributes else { return nil }
+
+                    let sociallyTrack = SociallyTrack(album: attributes.albumName, artist: attributes.artistName, name: attributes.name, isrc: attributes.isrc ?? "", context: "", imageURL: attributes.artwork.url)
+                    return sociallyTrack
+                }
+                result(.success(retVal))
+            case .failure(let err):
+                result(.failure(err))
+            }
+        }
+        
     }
 }
