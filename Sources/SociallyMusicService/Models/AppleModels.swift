@@ -50,6 +50,7 @@ public enum PlaylistType: String, Codable {
 public struct PlaylistAttributes: Codable {
     let description: EditorialNotes?
     let name: String
+    let artwork: Artwork?
     let canEdit: Bool
 }
 
