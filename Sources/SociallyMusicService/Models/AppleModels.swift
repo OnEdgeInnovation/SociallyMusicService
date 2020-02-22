@@ -84,11 +84,13 @@ public struct AdditionalResource<AttributesType: Codable, RelationshipsType: Cod
     let relationships: RelationshipsType?
 }
 public struct PlaylistRelationships: Codable {
-    let curator: Relationship<Curator>
+    let curator: Relationship<Curator>?
     let tracks: Relationship<Track>
 }
 
 public typealias Song = Resource<SongAttributes>
+
+public typealias LibrarySong = Resource<LibrarySongAttributes>
 
 public struct SongAttributes: Codable {
     let albumName: String
@@ -97,4 +99,19 @@ public struct SongAttributes: Codable {
     let isrc: String?
     let name: String
     let url: String?
+}
+
+public struct LibrarySongAttributes: Codable {
+    let albumName: String
+    let artistName: String
+    let artwork: Artwork
+    let playParams: PlayParameters
+    let name: String
+    
+}
+
+
+public struct PlayParameters: Codable {
+    let id: String
+    let kind: String
 }

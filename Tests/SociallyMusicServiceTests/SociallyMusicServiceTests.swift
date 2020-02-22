@@ -10,18 +10,28 @@ import XCTest
 @testable import SociallyMusicService
 
 class SociallyMusicServiceTests: XCTestCase {
-
+    let classToTest = AppleMusicService()
     override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        classToTest.setToken(devToken: "INSERT_DEV_TOKEN1", userToken: "INSERT_USER_TOKEN")
     }
 
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testDecodableAppleLibraryTracks() {
+        let expectation = XCTestExpectation(description: "Tracks are decodable from a playlist")
+        classToTest.getAllTracksForPlaylist(playlist: "INSERT_PLAYLIST_ID") { (result) in
+            switch result {
+            case .success(let tracks):
+                print(tracks)
+                expectation.fulfill()
+            case .failure(let err):
+                print(err)
+            }
+        }
+        
+        wait(for: [expectation], timeout: 5.0)
     }
 
     func testPerformanceExample() {
