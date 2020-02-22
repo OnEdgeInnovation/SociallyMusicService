@@ -35,7 +35,8 @@ The services return responses in the form of a SociallyTrack, SociallyArtist, So
 Here is some example code:
 
 ```swift
-let service = SpotifyService(token: spotifyToken)
+let service = SpotifyService()
+service.setToken(token: spotifyToken)
 service.getPlaylists { (result) in
   switch(result) {
   case .success(let playlists):
