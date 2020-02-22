@@ -179,7 +179,44 @@ public class AppleMusicService: MusicService {
         }
     }
     
-   /// Fetch tracks for a given playlist
+    /// Takes an id and returns back the Apple Music context for that track
+    /// - Parameters:
+    ///   - id: the id for a track
+    ///   - result: completion handler returning the context
+    public func getTrackInfo(id: String, result: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
+        guard let devToken = devToken else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        
+        let countryCode = "us"
+        let component = URLComponents(string: baseURL.appendingPathComponent("catalog/\(countryCode)/songs/\(id)").absoluteString)
+        
+        guard let url = component?.url else { return }
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
+        
+        fetchResources(request: request) { (resultVal: Result<ResponseRoot<Track>, APIServiceError>) in
+            switch resultVal {
+            case .success(let track):
+                guard let trackAttributes = track.data?[0].attributes else {
+                    result(.failure(.apiError))
+                    return
+                }
+                var imageURL = trackAttributes.artwork.url
+                imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
+                let sociallyTrack = SociallyTrack(album: trackAttributes.albumName, artist: trackAttributes.artistName, name: trackAttributes.name, isrc: trackAttributes.isrc, context: id, imageURL: imageURL)
+                result(.success(sociallyTrack))
+            case .failure:
+                result(.failure(.apiError))
+            }
+        }
+    }
+}
+
+extension AppleMusicService {
+    /// Fetch tracks for a given playlist
     /// - Parameters:
     ///   - songIds: song ids of of the songs you want to retrieve
     ///   - result: the completion handler containing the result of tracks or error
@@ -217,40 +254,5 @@ public class AppleMusicService: MusicService {
             }
         }
         
-    }
-    
-    /// Takes an id and returns back the Apple Music context for that track
-    /// - Parameters:
-    ///   - id: the id for a track
-    ///   - result: completion handler returning the context
-    public func getTrackInfo(id: String, result: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
-        guard let devToken = devToken else {
-            result(.failure(.tokenNilError))
-            return
-        }
-        
-        let countryCode = "us"
-        let component = URLComponents(string: baseURL.appendingPathComponent("catalog/\(countryCode)/songs/\(id)").absoluteString)
-        
-        guard let url = component?.url else { return }
-        
-        var request = URLRequest(url: url)
-        request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
-        
-        fetchResources(request: request) { (resultVal: Result<ResponseRoot<Track>, APIServiceError>) in
-            switch resultVal {
-            case .success(let track):
-                guard let trackAttributes = track.data?[0].attributes else {
-                    result(.failure(.apiError))
-                    return
-                }
-                var imageURL = trackAttributes.artwork.url
-                imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
-                let sociallyTrack = SociallyTrack(album: trackAttributes.albumName, artist: trackAttributes.artistName, name: trackAttributes.name, isrc: trackAttributes.isrc, context: id, imageURL: imageURL)
-                result(.success(sociallyTrack))
-            case .failure:
-                result(.failure(.apiError))
-            }
-        }
     }
 }
