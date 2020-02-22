@@ -132,7 +132,7 @@ public class SpotifyService: MusicService {
     ///   - limit: How many playlists to get, default of 20, max of 50
     ///   - offset: Where to start the playlist count
     ///   - result: The completion handler
-    func getUserPlaylists(of userId: String, limit: Int = 20, offset: Int = 0, result: @escaping (Result<[SociallyPlaylist], APIServiceError>) -> Void) {
+    public func getUserPlaylists(of userId: String, limit: Int = 20, offset: Int = 0, result: @escaping (Result<[SociallyPlaylist], APIServiceError>) -> Void) {
         guard let token = token else {
             result(.failure(.tokenNilError))
             return
