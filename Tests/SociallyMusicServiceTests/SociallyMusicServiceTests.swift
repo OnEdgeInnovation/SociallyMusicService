@@ -12,7 +12,7 @@ import XCTest
 class SociallyMusicServiceTests: XCTestCase {
     let classToTest = AppleMusicService()
     override func setUp() {
-        classToTest.setToken(devToken: "INSERT_DEV_TOKEN1", userToken: "INSERT_USER_TOKEN")
+        classToTest.setToken(devToken: "INSERT_DEV_TOKEN", userToken: "INSERT_USER_TOKEN")
     }
 
     override func tearDown() {
