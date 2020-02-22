@@ -472,7 +472,7 @@ public class SpotifyService: MusicService {
     /// - Parameters:
     ///   - playlistId: The id of the playlist
     ///   - result: The completion handler result containing the array of tracks or error
-    public func getAllTracksForPlaylist(_ playlistId: String, result: @escaping (Result<[SociallyTrack], Error>) -> Void) {
+    public func getAllTracksForPlaylist(_ playlistId: String, result: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
         var arr = [TrackItem]()
         var url: URL?
         let group = DispatchGroup()
@@ -492,7 +492,7 @@ public class SpotifyService: MusicService {
                     }
                 case .failure:
                     shouldContinue = false
-                    result(.failure(APIServiceError.invalidResponse))
+                    result(.failure(.invalidResponse))
                 }
                 group.leave()
             }
