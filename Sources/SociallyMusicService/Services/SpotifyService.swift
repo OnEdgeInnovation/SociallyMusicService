@@ -541,7 +541,9 @@ extension SpotifyService {
         }
         
         if let url = url {
-            fetchResources(request: URLRequest(url: url), result: result)
+            var request = URLRequest(url: url)
+            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            fetchResources(request: request, result: result)
             return
         }
         
