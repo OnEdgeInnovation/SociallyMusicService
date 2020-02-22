@@ -147,35 +147,35 @@ public class AppleMusicService: MusicService {
             result(.failure(.tokenNilError))
             return
         }
-        
         let component = URLComponents(string: baseURL.appendingPathComponent("me/library/playlists/\(playlist)/tracks").absoluteString)
-        
+
         guard let url = component?.url else { return }
-        
+
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
         request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
         
-        fetchResources(request: request) { (resultVal: Result<ResponseRoot<Track>, APIServiceError>) in
+        fetchResources(request: request) { (resultVal: Result<ResponseRoot<LibrarySong>, APIServiceError>) in
+            
             switch resultVal {
-            case .success(let playlist):
-                guard !(playlist.data?.isEmpty ?? true), let tracks = playlist.data else {
-                    result(.failure(.noData))
+            case .success(let responseRoot):
+                guard let tracks = responseRoot.data, !tracks.isEmpty else {
+                    result(.failure(APIServiceError.noData))
                     return
                 }
                 
-                let SociallyTracks: [SociallyTrack] = tracks.compactMap { (track) -> SociallyTrack? in
-                    
+                let sociallyTracks: [SociallyTrack] = tracks.compactMap { (track) -> SociallyTrack? in
                     guard let attributes = track.attributes else { return nil }
                     var imageURL = attributes.artwork.url
                     imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
-                    let sociallyTrack = SociallyTrack(album: attributes.albumName, artist: attributes.artistName, name: attributes.name, isrc: attributes.isrc, context: attributes.url.absoluteString, imageURL: imageURL)
+                     
+                    let sociallyTrack = SociallyTrack(album: attributes.albumName, artist: attributes.artistName, name: attributes.name, isrc: "", context: attributes.playParams.id, imageURL: attributes.artwork.url)
                     return sociallyTrack
                 }
                 
-                result(.success(SociallyTracks))
+                result(.success(sociallyTracks))
             case .failure:
-                result(.failure(.apiError))
+                result(.failure(APIServiceError.apiError))
             }
         }
     }
