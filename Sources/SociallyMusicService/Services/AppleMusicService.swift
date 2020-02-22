@@ -164,13 +164,8 @@ public class AppleMusicService: MusicService {
                     return
                 }
                 
-                let ids: [String] = tracks.map { (song) -> String in
-                    //removal of the a. so the songid is returned
-                    let trackIdIdx = song.id.index(song.id.startIndex, offsetBy: 2)
-                    let id = song.id.suffix(from: trackIdIdx)
-                    return String(id)
-                }
-                
+                let ids: [String] = tracks.map({$0.id})
+
                 self.getCatalogSongs(songIds: ids, result: result)
 
             case .failure:
@@ -225,7 +220,7 @@ extension AppleMusicService {
             result(.failure(.tokenNilError))
             return
         }
-        var component = URLComponents(string: baseURL.appendingPathComponent("catalog/us/songs").absoluteString)
+        var component = URLComponents(string: baseURL.appendingPathComponent("me/library/songs").absoluteString)
         component?.queryItems = [
             URLQueryItem(name: "ids", value: songIds.joined(separator: ","))
         ]
@@ -234,7 +229,8 @@ extension AppleMusicService {
 
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
-
+        request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
+        
         fetchResources(request: request) { (resultVal: Result<ResponseRoot<Song>, APIServiceError>) in
             switch resultVal {
             case .success(let songs):
