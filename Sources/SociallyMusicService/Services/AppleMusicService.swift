@@ -163,11 +163,8 @@ public class AppleMusicService: MusicService {
                     result(.failure(APIServiceError.noData))
                     return
                 }
-                
                 let ids: [String] = tracks.map({$0.id})
-
                 self.getCatalogSongs(songIds: ids, result: result)
-
             case .failure:
                 result(.failure(APIServiceError.apiError))
             }
@@ -242,7 +239,7 @@ extension AppleMusicService {
                     guard let attributes = song.attributes else { return nil }
                     var imageURL = attributes.artwork.url
                     imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
-                    let sociallyTrack = SociallyTrack(album: attributes.albumName, artist: attributes.artistName, name: attributes.name, isrc: attributes.isrc ?? "", context: "", imageURL: imageURL)
+                    let sociallyTrack = SociallyTrack(album: attributes.albumName, artist: attributes.artistName, name: attributes.name, isrc: attributes.isrc ?? "", context: song.id, imageURL: imageURL)
                     return sociallyTrack
                 }
                 result(.success(retVal))
