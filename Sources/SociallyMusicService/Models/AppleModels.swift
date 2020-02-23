@@ -100,6 +100,7 @@ public struct SongAttributes: Codable {
     let isrc: String?
     let name: String
     let url: String?
+    let playParams: PlayParameters
 }
 
 public struct LibrarySongAttributes: Codable {
@@ -115,4 +116,5 @@ public struct LibrarySongAttributes: Codable {
 public struct PlayParameters: Codable {
     let id: String
     let kind: String
+    let catalogId: String?
 }

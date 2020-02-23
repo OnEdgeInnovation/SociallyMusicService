@@ -236,10 +236,10 @@ extension AppleMusicService {
                     return
                 }
                 let retVal = tracks.compactMap { (song) -> SociallyTrack? in
-                    guard let attributes = song.attributes else { return nil }
+                    guard let attributes = song.attributes, let catalogId = attributes.playParams.catalogId else { return nil }
                     var imageURL = attributes.artwork.url
                     imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
-                    let sociallyTrack = SociallyTrack(album: attributes.albumName, artist: attributes.artistName, name: attributes.name, isrc: attributes.isrc ?? "", context: song.id, imageURL: imageURL)
+                    let sociallyTrack = SociallyTrack(album: attributes.albumName, artist: attributes.artistName, name: attributes.name, isrc: attributes.isrc ?? "", context: catalogId, imageURL: imageURL)
                     return sociallyTrack
                 }
                 result(.success(retVal))
