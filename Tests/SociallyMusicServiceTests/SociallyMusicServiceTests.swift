@@ -21,7 +21,7 @@ class SociallyMusicServiceTests: XCTestCase {
 
     func testDecodableAppleLibraryTracks() {
         let expectation = XCTestExpectation(description: "Tracks are decodable from a playlist")
-        classToTest.getAllTracksForPlaylist(playlist: "INSERT_PLAYLIST_ID") { (result) in
+        classToTest.getAllTracksForPlaylist(playlist: "") { (result) in
             switch result {
             case .success(let tracks):
                 print(tracks)
@@ -33,16 +33,27 @@ class SociallyMusicServiceTests: XCTestCase {
         
         wait(for: [expectation], timeout: 5.0)
     }
-    func testHeavyRotation() {
+    func testTopArtists() {
         let expectation = XCTestExpectation(description: "Heavy rotation history is decodable")
         
-        classToTest.getHeavyRotation(type: "asdf", result: {
+        classToTest.getTopArtists { (result) in
+            print(result)
             expectation.fulfill()
-            print("done")
-        })
+        }
 
         wait(for: [expectation], timeout: 5.0)
     }
+    
+    func testTopTracks() {
+           let expectation = XCTestExpectation(description: "Heavy rotation history is decodable")
+           
+           classToTest.getTopTracks { (result) in
+               print(result)
+               expectation.fulfill()
+           }
+
+           wait(for: [expectation], timeout: 20.0)
+       }
 
     func testPerformanceExample() {
         // This is an example of a performance test case.

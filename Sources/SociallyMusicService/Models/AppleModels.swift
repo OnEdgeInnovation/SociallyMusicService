@@ -112,7 +112,6 @@ public struct LibrarySongAttributes: Codable {
     
 }
 
-
 public struct PlayParameters: Codable {
     let id: String
     let kind: String
@@ -122,10 +121,25 @@ public struct PlayParameters: Codable {
 public typealias HistoryObject = Resource<HistoryAttributes>
 
 public struct HistoryAttributes: Codable {
-    let artistName: String
-    let artwork: Artwork
+    let artistName: String?
+    let artwork: Artwork?
     let name: String
     let playParams: PlayParameters
 }
 
+public struct ChartRoot: Codable {
+    let results: SongChart
+}
+
+public struct SongChart: Codable {
+    let songs: [AppleChart]
+}
+
+public struct AppleChart: Codable {
+    let chart: String
+    let data: [Song]
+    let href: String
+    let name: String
+    let next: String?
+}
 

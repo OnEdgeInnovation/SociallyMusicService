@@ -148,9 +148,9 @@ public class AppleMusicService: MusicService {
             return
         }
         let component = URLComponents(string: baseURL.appendingPathComponent("me/library/playlists/\(playlist)/tracks").absoluteString)
-
+        
         guard let url = component?.url else { return }
-
+        
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
         request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
@@ -171,17 +171,58 @@ public class AppleMusicService: MusicService {
         }
     }
     
-    public enum HeavyRotationType: String {
-        case album
-        case artist
-    }
-    public func getHeavyRotation(type: String, result: @escaping () -> Void = { }) {
+    private func getTopArtistsFallback(result: @escaping (Result<[SociallyArtist], APIServiceError>) -> Void) {
         guard let devToken = devToken else {
-                    result()
-//                   result(.failure(.tokenNilError))
-                   return
-               }
-        var component = URLComponents(string: baseURL.appendingPathComponent("me/recent/played").absoluteString)
+            result(.failure(.tokenNilError))
+            return
+        }
+        var component = URLComponents(string: baseURL.appendingPathComponent("catalog/us/charts").absoluteString)
+        component?.queryItems = [
+            URLQueryItem(name: "types", value: "songs"),
+            URLQueryItem(name: "limit", value: "50"),
+            URLQueryItem(name: "genre", value: "34"),
+            URLQueryItem(name: "chart", value: "most-played")
+            
+        ]
+        
+        guard let url = component?.url else { return }
+        
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
+        request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
+        print(request)
+        fetchResources(request: request) { (resultVal: Result<ChartRoot, APIServiceError>) in
+            switch resultVal {
+            case .success(let res):
+                guard !res.results.songs.isEmpty else {
+                    result(.failure(.noData))
+                    return
+                }
+                var ret = [SociallyArtist]()
+                for song in res.results.songs[0].data {
+                    guard let attributes = song.attributes else { continue }
+                    var imageURL = attributes.artwork.url
+                    imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
+                    let sociallyArtist = SociallyArtist(name: attributes.artistName, id: attributes.playParams.id, imageURL: imageURL)
+                    if !ret.contains(where: {$0.name == sociallyArtist.name}) {
+                        ret.append(sociallyArtist)
+                    }
+                }
+                
+                result(.success(ret))
+            case .failure(let err):
+                result(.failure(err))
+            }
+            
+        }
+    }
+    public func getTopArtists(result: @escaping (Result<[SociallyArtist], APIServiceError>) -> Void) {
+        guard let devToken = devToken else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        var component = URLComponents(string: baseURL.appendingPathComponent("me/history/heavy-rotation").absoluteString)
         
         guard let url = component?.url else { return }
         component?.queryItems = [
@@ -194,18 +235,72 @@ public class AppleMusicService: MusicService {
         fetchResources(request: request) { (resultVal: Result<ResponseRoot<Resource<HistoryAttributes>>, APIServiceError>) in
             switch resultVal {
             case .success(let history):
-                if let data = history.data {
-                    data.forEach({print($0.attributes?.playParams.kind)})
+                var artists = [SociallyArtist]()
+                if let data = history.data, !data.isEmpty {
+                    data.forEach({
+                        if let obj = $0.attributes, obj.playParams.kind == "album", let artistName = obj.artistName,
+                            var imageURL = obj.artwork?.url {
+                            imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
+                            let artist = SociallyArtist(name: artistName, id: obj.playParams.id, imageURL: imageURL)
+                            if !artists.contains(where: {$0.name == artist.name}) {
+                                artists.append(artist)
+                            }
+                        }
+                    })
                 } else {
-                    print(history)
+                    // If data is empty or null, get top artists of the most played songs instead.
+                    self.getTopArtistsFallback(result: result)
+                    return
                 }
+                result(.success(artists))
             case .failure(let err):
-                print(err)
-                
+                result(.failure(err))
             }
-            result()
+            
         }
+    }
+    
+    public func getTopTracks(result: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void ) {
+        guard let devToken = devToken else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        var component = URLComponents(string: baseURL.appendingPathComponent("catalog/us/charts").absoluteString)
+        component?.queryItems = [
+            URLQueryItem(name: "types", value: "songs"),
+            URLQueryItem(name: "limit", value: "50"),
+            URLQueryItem(name: "genre", value: "34"),
+            URLQueryItem(name: "chart", value: "most-played")
+            
+        ]
         
+        guard let url = component?.url else { return }
+        
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
+        request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
+        print(request)
+        fetchResources(request: request) { (resultVal: Result<ChartRoot, APIServiceError>) in
+            switch resultVal {
+            case .success(let res):
+                guard !res.results.songs.isEmpty else {
+                    result(.failure(.noData))
+                    return
+                }
+                let retVal = res.results.songs[0].data.compactMap { (song) -> SociallyTrack? in
+                    guard let attributes = song.attributes else { return nil }
+                    var imageURL = attributes.artwork.url
+                    imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
+                    let sociallyTrack = SociallyTrack(album: attributes.albumName, artist: attributes.artistName, name: attributes.name, isrc: attributes.isrc ?? "", context: song.id, imageURL: imageURL)
+                    return sociallyTrack
+                }
+                result(.success(retVal))
+            case .failure(let err):
+                result(.failure(err))
+            }
+            
+        }
     }
     
     /// Takes an id and returns back the Apple Music context for that track
@@ -250,7 +345,7 @@ extension AppleMusicService {
     ///   - songIds: song ids of of the songs you want to retrieve
     ///   - result: the completion handler containing the result of tracks or error
     private func getCatalogSongs(songIds: [String], result: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
-       guard let devToken = devToken else {
+        guard let devToken = devToken else {
             result(.failure(.tokenNilError))
             return
         }
@@ -258,9 +353,9 @@ extension AppleMusicService {
         component?.queryItems = [
             URLQueryItem(name: "ids", value: songIds.joined(separator: ","))
         ]
-
+        
         guard let url = component?.url else { return }
-
+        
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
         request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
