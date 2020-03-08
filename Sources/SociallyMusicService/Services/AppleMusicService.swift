@@ -171,6 +171,43 @@ public class AppleMusicService: MusicService {
         }
     }
     
+    public enum HeavyRotationType: String {
+        case album
+        case artist
+    }
+    public func getHeavyRotation(type: String, result: @escaping () -> Void = { }) {
+        guard let devToken = devToken else {
+                    result()
+//                   result(.failure(.tokenNilError))
+                   return
+               }
+        var component = URLComponents(string: baseURL.appendingPathComponent("me/recent/played").absoluteString)
+        
+        guard let url = component?.url else { return }
+        component?.queryItems = [
+            URLQueryItem(name: "limit", value: "100")
+        ]
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
+        request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
+        fetchResources(request: request) { (resultVal: Result<ResponseRoot<Resource<HistoryAttributes>>, APIServiceError>) in
+            switch resultVal {
+            case .success(let history):
+                if let data = history.data {
+                    data.forEach({print($0.attributes?.playParams.kind)})
+                } else {
+                    print(history)
+                }
+            case .failure(let err):
+                print(err)
+                
+            }
+            result()
+        }
+        
+    }
+    
     /// Takes an id and returns back the Apple Music context for that track
     /// - Parameters:
     ///   - id: the id for a track

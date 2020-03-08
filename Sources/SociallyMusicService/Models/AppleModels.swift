@@ -118,3 +118,14 @@ public struct PlayParameters: Codable {
     let kind: String
     let catalogId: String?
 }
+
+public typealias HistoryObject = Resource<HistoryAttributes>
+
+public struct HistoryAttributes: Codable {
+    let artistName: String
+    let artwork: Artwork
+    let name: String
+    let playParams: PlayParameters
+}
+
+

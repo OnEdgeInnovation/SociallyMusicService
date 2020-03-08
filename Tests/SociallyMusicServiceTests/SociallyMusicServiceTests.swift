@@ -12,7 +12,7 @@ import XCTest
 class SociallyMusicServiceTests: XCTestCase {
     let classToTest = AppleMusicService()
     override func setUp() {
-        classToTest.setToken(devToken: "INSERT_DEV_TOKEN", userToken: "INSERT_USER_TOKEN")
+        classToTest.setToken(devToken: "", userToken: "")
     }
 
     override func tearDown() {
@@ -31,6 +31,16 @@ class SociallyMusicServiceTests: XCTestCase {
             }
         }
         
+        wait(for: [expectation], timeout: 5.0)
+    }
+    func testHeavyRotation() {
+        let expectation = XCTestExpectation(description: "Heavy rotation history is decodable")
+        
+        classToTest.getHeavyRotation(type: "asdf", result: {
+            expectation.fulfill()
+            print("done")
+        })
+
         wait(for: [expectation], timeout: 5.0)
     }
 
