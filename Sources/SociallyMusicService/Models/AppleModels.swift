@@ -50,6 +50,7 @@ public enum PlaylistType: String, Codable {
 public struct PlaylistAttributes: Codable {
     let description: EditorialNotes?
     let name: String
+    let artwork: Artwork?
     let canEdit: Bool
 }
 
@@ -84,11 +85,13 @@ public struct AdditionalResource<AttributesType: Codable, RelationshipsType: Cod
     let relationships: RelationshipsType?
 }
 public struct PlaylistRelationships: Codable {
-    let curator: Relationship<Curator>
+    let curator: Relationship<Curator>?
     let tracks: Relationship<Track>
 }
 
 public typealias Song = Resource<SongAttributes>
+
+public typealias LibrarySong = Resource<LibrarySongAttributes>
 
 public struct SongAttributes: Codable {
     let albumName: String
@@ -97,4 +100,46 @@ public struct SongAttributes: Codable {
     let isrc: String?
     let name: String
     let url: String?
+    let playParams: PlayParameters
 }
+
+public struct LibrarySongAttributes: Codable {
+    let albumName: String
+    let artistName: String
+    let artwork: Artwork
+    let playParams: PlayParameters
+    let name: String
+    
+}
+
+public struct PlayParameters: Codable {
+    let id: String
+    let kind: String
+    let catalogId: String?
+}
+
+public typealias HistoryObject = Resource<HistoryAttributes>
+
+public struct HistoryAttributes: Codable {
+    let artistName: String?
+    let artwork: Artwork?
+    let name: String
+    let playParams: PlayParameters
+}
+
+public struct ChartRoot: Codable {
+    let results: SongChart
+}
+
+public struct SongChart: Codable {
+    let songs: [AppleChart]
+}
+
+public struct AppleChart: Codable {
+    let chart: String
+    let data: [Song]
+    let href: String
+    let name: String
+    let next: String?
+}
+

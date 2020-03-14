@@ -402,6 +402,10 @@ public class SpotifyService: MusicService {
         fetchResources(request: request) { (resultVal: Result<TrackPagingObject<TrackItem>, APIServiceError>) in
             switch resultVal {
             case .success(let pagingObj):
+                if pagingObj.tracks.items.isEmpty {
+                    result(.failure(.noData))
+                    return
+                }
                 result(.success(SociallyTrack(from: pagingObj.tracks.items[0])))
             case .failure(let error):
                 result(.failure(error))

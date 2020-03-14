@@ -147,7 +147,6 @@ public class AppleMusicService: MusicService {
             result(.failure(.tokenNilError))
             return
         }
-        
         let component = URLComponents(string: baseURL.appendingPathComponent("me/library/playlists/\(playlist)/tracks").absoluteString)
         
         guard let url = component?.url else { return }
@@ -156,27 +155,151 @@ public class AppleMusicService: MusicService {
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
         request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
         
-        fetchResources(request: request) { (resultVal: Result<ResponseRoot<Track>, APIServiceError>) in
+        fetchResources(request: request) { (resultVal: Result<ResponseRoot<LibrarySong>, APIServiceError>) in
+            
             switch resultVal {
-            case .success(let playlist):
-                guard !(playlist.data?.isEmpty ?? true), let tracks = playlist.data else {
+            case .success(let responseRoot):
+                guard let tracks = responseRoot.data, !tracks.isEmpty else {
+                    result(.failure(APIServiceError.noData))
+                    return
+                }
+                let ids: [String] = tracks.map({$0.id})
+                self.getCatalogSongs(songIds: ids, result: result)
+            case .failure:
+                result(.failure(APIServiceError.apiError))
+            }
+        }
+    }
+    
+    private func getTopArtistsFallback(result: @escaping (Result<[SociallyArtist], APIServiceError>) -> Void) {
+        guard let devToken = devToken else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        var component = URLComponents(string: baseURL.appendingPathComponent("catalog/us/charts").absoluteString)
+        component?.queryItems = [
+            URLQueryItem(name: "types", value: "songs"),
+            URLQueryItem(name: "limit", value: "50"),
+            URLQueryItem(name: "genre", value: "34"),
+            URLQueryItem(name: "chart", value: "most-played")
+            
+        ]
+        
+        guard let url = component?.url else { return }
+        
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
+        request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
+        print(request)
+        fetchResources(request: request) { (resultVal: Result<ChartRoot, APIServiceError>) in
+            switch resultVal {
+            case .success(let res):
+                guard !res.results.songs.isEmpty else {
                     result(.failure(.noData))
                     return
                 }
-                
-                let SociallyTracks: [SociallyTrack] = tracks.compactMap { (track) -> SociallyTrack? in
-                    
-                    guard let attributes = track.attributes else { return nil }
+                var ret = [SociallyArtist]()
+                for song in res.results.songs[0].data {
+                    guard let attributes = song.attributes else { continue }
                     var imageURL = attributes.artwork.url
                     imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
-                    let sociallyTrack = SociallyTrack(album: attributes.albumName, artist: attributes.artistName, name: attributes.name, isrc: attributes.isrc, context: attributes.url.absoluteString, imageURL: imageURL)
-                    return sociallyTrack
+                    let sociallyArtist = SociallyArtist(name: attributes.artistName, id: attributes.playParams.id, imageURL: imageURL)
+                    if !ret.contains(where: {$0.name == sociallyArtist.name}) {
+                        ret.append(sociallyArtist)
+                    }
                 }
                 
-                result(.success(SociallyTracks))
-            case .failure:
-                result(.failure(.apiError))
+                result(.success(ret))
+            case .failure(let err):
+                result(.failure(err))
             }
+            
+        }
+    }
+    public func getTopArtists(result: @escaping (Result<[SociallyArtist], APIServiceError>) -> Void) {
+        guard let devToken = devToken else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        var component = URLComponents(string: baseURL.appendingPathComponent("me/history/heavy-rotation").absoluteString)
+        
+        guard let url = component?.url else { return }
+        component?.queryItems = [
+            URLQueryItem(name: "limit", value: "100")
+        ]
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
+        request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
+        fetchResources(request: request) { (resultVal: Result<ResponseRoot<Resource<HistoryAttributes>>, APIServiceError>) in
+            switch resultVal {
+            case .success(let history):
+                var artists = [SociallyArtist]()
+                if let data = history.data, !data.isEmpty {
+                    data.forEach({
+                        if let obj = $0.attributes, obj.playParams.kind == "album", let artistName = obj.artistName,
+                            var imageURL = obj.artwork?.url {
+                            imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
+                            let artist = SociallyArtist(name: artistName, id: obj.playParams.id, imageURL: imageURL)
+                            if !artists.contains(where: {$0.name == artist.name}) {
+                                artists.append(artist)
+                            }
+                        }
+                    })
+                } else {
+                    // If data is empty or null, get top artists of the most played songs instead.
+                    self.getTopArtistsFallback(result: result)
+                    return
+                }
+                result(.success(artists))
+            case .failure(let err):
+                result(.failure(err))
+            }
+            
+        }
+    }
+    
+    public func getTopTracks(result: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void ) {
+        guard let devToken = devToken else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        var component = URLComponents(string: baseURL.appendingPathComponent("catalog/us/charts").absoluteString)
+        component?.queryItems = [
+            URLQueryItem(name: "types", value: "songs"),
+            URLQueryItem(name: "limit", value: "50"),
+            URLQueryItem(name: "genre", value: "34"),
+            URLQueryItem(name: "chart", value: "most-played")
+            
+        ]
+        
+        guard let url = component?.url else { return }
+        
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
+        request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
+        print(request)
+        fetchResources(request: request) { (resultVal: Result<ChartRoot, APIServiceError>) in
+            switch resultVal {
+            case .success(let res):
+                guard !res.results.songs.isEmpty else {
+                    result(.failure(.noData))
+                    return
+                }
+                let retVal = res.results.songs[0].data.compactMap { (song) -> SociallyTrack? in
+                    guard let attributes = song.attributes else { return nil }
+                    var imageURL = attributes.artwork.url
+                    imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
+                    let sociallyTrack = SociallyTrack(album: attributes.albumName, artist: attributes.artistName, name: attributes.name, isrc: attributes.isrc ?? "", context: song.id, imageURL: imageURL)
+                    return sociallyTrack
+                }
+                result(.success(retVal))
+            case .failure(let err):
+                result(.failure(err))
+            }
+            
         }
     }
     
@@ -213,5 +336,49 @@ public class AppleMusicService: MusicService {
                 result(.failure(.apiError))
             }
         }
+    }
+}
+
+extension AppleMusicService {
+    /// Fetch tracks for a given playlist
+    /// - Parameters:
+    ///   - songIds: song ids of of the songs you want to retrieve
+    ///   - result: the completion handler containing the result of tracks or error
+    private func getCatalogSongs(songIds: [String], result: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
+        guard let devToken = devToken else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        var component = URLComponents(string: baseURL.appendingPathComponent("me/library/songs").absoluteString)
+        component?.queryItems = [
+            URLQueryItem(name: "ids", value: songIds.joined(separator: ","))
+        ]
+        
+        guard let url = component?.url else { return }
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
+        request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
+        
+        fetchResources(request: request) { (resultVal: Result<ResponseRoot<Song>, APIServiceError>) in
+            switch resultVal {
+            case .success(let songs):
+                guard let tracks = songs.data, !tracks.isEmpty else {
+                    result(.failure(.noData))
+                    return
+                }
+                let retVal = tracks.compactMap { (song) -> SociallyTrack? in
+                    guard let attributes = song.attributes, let catalogId = attributes.playParams.catalogId else { return nil }
+                    var imageURL = attributes.artwork.url
+                    imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
+                    let sociallyTrack = SociallyTrack(album: attributes.albumName, artist: attributes.artistName, name: attributes.name, isrc: attributes.isrc ?? "", context: catalogId, imageURL: imageURL)
+                    return sociallyTrack
+                }
+                result(.success(retVal))
+            case .failure(let err):
+                result(.failure(err))
+            }
+        }
+        
     }
 }
