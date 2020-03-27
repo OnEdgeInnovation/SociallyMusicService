@@ -25,7 +25,7 @@ In order to add this framework as a dependency:
 - Open your project in Xcode 11.0>=
 - Click File>Swift Packages>Add Package Dependency
 - Then put in the URL of this repo: https://github.com/OnEdgeInnovation/SociallyMusicService.git
-- Configure the versioning as master. Master branch will be the working/tested copy of this repo
+- Configure the versioning as you wish. I will continually update with new features to develop and merge them into master after testing.
 
 ## Usage
 This API will require you to have previously setup access with the providers beforehand. You will need to head to their respective sites/guides to setup your access tokens. Once you have setup those tokens, you can use them to initialize these services and access the API endpoints I have enabled for you to use.
