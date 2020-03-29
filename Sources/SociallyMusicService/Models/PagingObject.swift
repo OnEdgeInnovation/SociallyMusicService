@@ -34,6 +34,21 @@ public struct PagingObject<T: Codable>: Codable {
     }
 }
 
-public struct TrackPagingObject<T: Codable>: Codable {
-    let tracks: PagingObject<T>
+public struct TrackPagingObject: Codable {
+    let tracks: PagingObject<TrackItem>
+}
+
+public struct SearchPagingObject: Codable {
+    let tracks: PagingObject<TrackItem>
+    let artists: PagingObject<Artist>
+    let playlists: PagingObject<Playlist>
+    public var sociallyTracks: [SociallyTrack] {
+        return tracks.items.map { SociallyTrack(from: $0) }
+    }
+    public var sociallyArtists: [SociallyArtist] {
+        return artists.items.map { SociallyArtist(from: $0) }
+    }
+    public var sociallyPlaylists: [SociallyPlaylist] {
+        return playlists.items.map { SociallyPlaylist(from: $0) }
+    }
 }

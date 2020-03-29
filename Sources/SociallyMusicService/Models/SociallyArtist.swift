@@ -34,6 +34,10 @@ public struct SociallyArtist: Codable {
     init(from artist: Artist) {
         self.name = artist.name
         self.id = artist.id
+        guard !artist.images.isEmpty else {
+            self.imageURL = ""
+            return
+        }
         self.imageURL = artist.images[0].url.absoluteString
     }
     

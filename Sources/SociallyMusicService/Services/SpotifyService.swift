@@ -399,7 +399,7 @@ public class SpotifyService: MusicService {
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        fetchResources(request: request) { (resultVal: Result<TrackPagingObject<TrackItem>, APIServiceError>) in
+        fetchResources(request: request) { (resultVal: Result<TrackPagingObject, APIServiceError>) in
             switch resultVal {
             case .success(let pagingObj):
                 if pagingObj.tracks.items.isEmpty {
@@ -407,6 +407,39 @@ public class SpotifyService: MusicService {
                     return
                 }
                 result(.success(SociallyTrack(from: pagingObj.tracks.items[0])))
+            case .failure(let error):
+                result(.failure(error))
+            }
+        }
+    }
+    
+    /// Takes a search parameter and returns back the results
+    /// - Parameters:
+    ///   - search: the text to search for
+    ///   - result: completion handler returning the contextt
+    public func search(search: String, result: @escaping (Result<SearchPagingObject, APIServiceError>) -> Void) {
+        guard let token = token else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        
+        var component = URLComponents(string: baseURL.appendingPathComponent("search").absoluteString)
+        
+        let search = search.replacingOccurrences(of: " ", with: "+")
+        component?.queryItems = [
+            URLQueryItem(name: "q", value: search),
+            URLQueryItem(name: "type", value: "track,artist,playlist"),
+            URLQueryItem(name: "limit", value: "5")
+        ]
+        
+        guard let url = component?.url else { return }
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        fetchResources(request: request) { (resultVal: Result<SearchPagingObject, APIServiceError>) in
+            switch resultVal {
+            case .success(let pagingObj):
+                result(.success(pagingObj))
             case .failure(let error):
                 result(.failure(error))
             }
