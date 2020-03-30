@@ -56,6 +56,19 @@ public struct SociallyTrack: Codable {
         self.isrc = track.externalIds?.isrc ?? ""
     }
     
+    init(from track: SimplifiedTrack) {
+        self.album = ""
+        if !track.artists.isEmpty {
+            self.artist = track.artists[0].name
+        } else {
+            self.artist = ""
+        }
+        self.name = track.name
+        self.context = track.uri
+        self.imageURL = ""
+        self.isrc = ""
+    }
+    
     //Converting to JSON representation
     public var jsonRepresentation: [String: String] {
         return [

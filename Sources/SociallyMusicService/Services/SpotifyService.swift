@@ -399,14 +399,14 @@ public class SpotifyService: MusicService {
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        fetchResources(request: request) { (resultVal: Result<TrackPagingObject, APIServiceError>) in
+        fetchResources(request: request) { (resultVal: Result<PagingObject<TrackItem>, APIServiceError>) in
             switch resultVal {
             case .success(let pagingObj):
-                if pagingObj.tracks.items.isEmpty {
+                if pagingObj.items.isEmpty {
                     result(.failure(.noData))
                     return
                 }
-                result(.success(SociallyTrack(from: pagingObj.tracks.items[0])))
+                result(.success(SociallyTrack(from: pagingObj.items[0])))
             case .failure(let error):
                 result(.failure(error))
             }
@@ -428,7 +428,7 @@ public class SpotifyService: MusicService {
         let search = search.replacingOccurrences(of: " ", with: "+")
         component?.queryItems = [
             URLQueryItem(name: "q", value: search),
-            URLQueryItem(name: "type", value: "track,artist,playlist"),
+            URLQueryItem(name: "type", value: "track,artist,playlist,album"),
             URLQueryItem(name: "limit", value: "5")
         ]
         
@@ -534,6 +534,39 @@ public class SpotifyService: MusicService {
                 group.leave()
             }
             group.wait()
+        }
+    }
+    
+    /// Get
+    /// - Parameters:
+    ///   - albumId: the id of the album
+    ///   - result: the result of the api call, either an array of tracks or error
+    public func getTracksForAlbum(_ albumId: String, result: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
+        guard let token = token else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        
+        var component = URLComponents(string: baseURL.appendingPathComponent("albums/\(albumId)/tracks").absoluteString)
+        
+        component?.queryItems = [
+            URLQueryItem(name: "limit", value: "50")
+        ]
+        
+        guard let finURL = component?.url else {
+            result(.failure(.invalidCompiledURL))
+            return
+        }
+        var urlreq = URLRequest(url: finURL)
+        urlreq.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        fetchResources(request: urlreq) { (resultVal: Result<PagingObject<SimplifiedTrack>, APIServiceError>) in
+            switch resultVal {
+            case .success(let pagingObj):
+                let ids = pagingObj.items.map { $0.id }
+                self.getMultipleTracksInfo(ids: ids, result: result)
+            case .failure(let error):
+                result(.failure(error))
+            }
         }
     }
 }
