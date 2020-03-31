@@ -381,8 +381,8 @@ public class SpotifyService: MusicService {
     /// Takes an ISRC and returns back the track information
     /// - Parameters:
     ///   - isrc: the ISRC for a track
-    ///   - result: completion handler returning the contextt
-    public func searchByISRC(isrc: String, result: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
+    ///   - result: completion handler returning the context
+    public func searchByISRC(isrc: String, trackName: String = "", trackArtist: String = "", result: @escaping (Result<SociallyTrack, APIServiceError>) -> Void) {
         guard let token = token else {
             result(.failure(.tokenNilError))
             return
@@ -399,14 +399,31 @@ public class SpotifyService: MusicService {
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        fetchResources(request: request) { (resultVal: Result<PagingObject<TrackItem>, APIServiceError>) in
+        fetchResources(request: request) { (resultVal: Result<TrackPagingObject<TrackItem>, APIServiceError>) in
             switch resultVal {
             case .success(let pagingObj):
-                if pagingObj.items.isEmpty {
-                    result(.failure(.noData))
-                    return
+                //if array is empty, search by text instead
+                if pagingObj.tracks.items.isEmpty {
+                    guard trackName != "" && trackArtist != "" else {
+                        result(.failure(.noData))
+                        return
+                    }
+                    let query = "track:\(trackName)+artist:\(trackArtist)".replacingOccurrences(of: "&", with: "").replacingOccurrences(of: " ", with: "+")
+                    self.search(query: query, type: "track", limit: 1) { (innerResultVal) in
+                        switch innerResultVal {
+                        case .success(let pagingObj):
+                            guard let track = pagingObj.sociallyTracks.first else {
+                                result(.failure(.noData))
+                                return
+                            }
+                            result(.success(track))
+                        case .failure(let error):
+                            result(.failure(error))
+                        }
+                    }
+                } else {
+                    result(.success(SociallyTrack(from: pagingObj.tracks.items[0])))
                 }
-                result(.success(SociallyTrack(from: pagingObj.items[0])))
             case .failure(let error):
                 result(.failure(error))
             }
@@ -415,9 +432,11 @@ public class SpotifyService: MusicService {
     
     /// Takes a search parameter and returns back the results
     /// - Parameters:
-    ///   - search: the text to search for
-    ///   - result: completion handler returning the contextt
-    public func search(search: String, result: @escaping (Result<SearchPagingObject, APIServiceError>) -> Void) {
+    ///   - query: the query to search for, refer to Spotify's guidelines
+    ///   - type: the types to include in the result
+    ///   - limit: the number of items per type
+    ///   - result: completion handler returning the context
+    public func search(query: String, type: String = "track,artist,playlist,album", limit: Int = 5, result: @escaping (Result<SearchPagingObject, APIServiceError>) -> Void) {
         guard let token = token else {
             result(.failure(.tokenNilError))
             return
@@ -425,11 +444,10 @@ public class SpotifyService: MusicService {
         
         var component = URLComponents(string: baseURL.appendingPathComponent("search").absoluteString)
         
-        let search = search.replacingOccurrences(of: " ", with: "+")
         component?.queryItems = [
-            URLQueryItem(name: "q", value: search),
-            URLQueryItem(name: "type", value: "track,artist,playlist,album"),
-            URLQueryItem(name: "limit", value: "5")
+            URLQueryItem(name: "q", value: query),
+            URLQueryItem(name: "type", value: type),
+            URLQueryItem(name: "limit", value: "\(limit)")
         ]
         
         guard let url = component?.url else { return }
