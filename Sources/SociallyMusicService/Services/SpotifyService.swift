@@ -392,7 +392,8 @@ public class SpotifyService: MusicService {
         
         component?.queryItems = [
             URLQueryItem(name: "q", value: "isrc:\(isrc)"),
-            URLQueryItem(name: "type", value: "track")
+            URLQueryItem(name: "type", value: "track"),
+            URLQueryItem(name: "market", value: "from_token")
         ]
         
         guard let url = component?.url else { return }
@@ -447,7 +448,8 @@ public class SpotifyService: MusicService {
         component?.queryItems = [
             URLQueryItem(name: "q", value: query),
             URLQueryItem(name: "type", value: type),
-            URLQueryItem(name: "limit", value: "\(limit)")
+            URLQueryItem(name: "limit", value: "\(limit)"),
+            URLQueryItem(name: "market", value: "from_token")
         ]
         
         guard let url = component?.url else { return }
@@ -582,6 +584,85 @@ public class SpotifyService: MusicService {
             case .success(let pagingObj):
                 let ids = pagingObj.items.map { $0.id }
                 self.getMultipleTracksInfo(ids: ids, result: result)
+            case .failure(let error):
+                result(.failure(error))
+            }
+        }
+    }
+    
+    /// Returns the top tracks for an artist
+    /// - Parameters:
+    ///   - artistId: The id of the artist
+    ///   - result: The completion handler result containing the array of tracks or error
+    public func getArtistTopTracks(_ artistId: String, result: @escaping (Result<[SociallyTrack], APIServiceError>) -> Void) {
+        guard let token = token else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        
+        var component = URLComponents(string: baseURL.appendingPathComponent("artists/\(artistId)/top-tracks").absoluteString)
+        
+        component?.queryItems = [
+            URLQueryItem(name: "id", value: artistId),
+            URLQueryItem(name: "market", value: "from_token")
+        ]
+        
+        guard let finURL = component?.url else {
+            result(.failure(.invalidCompiledURL))
+            return
+        }
+        
+        var request = URLRequest(url: finURL)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        fetchResources(request: request) { (resultVal: Result<TrackItemList, APIServiceError>) in
+            switch resultVal {
+            case .success(let trackList):
+                result(.success(trackList.tracks.map { SociallyTrack(from: $0)}))
+            case .failure(let error):
+                result(.failure(error))
+            }
+        }
+    }
+    
+    /// Returns the albums for an artist
+    /// - Parameters:
+    ///   - artistId: The id of the artist
+    ///   - result: The completion handler result containing the array of albums or error
+    public func getArtistAlbums(_ artistId: String, limit: Int = 20, result: @escaping (Result<[SociallyAlbum], APIServiceError>) -> Void) {
+        guard let token = token else {
+            result(.failure(.tokenNilError))
+            return
+        }
+        
+        var component = URLComponents(string: baseURL.appendingPathComponent("artists/\(artistId)/albums").absoluteString)
+        
+        component?.queryItems = [
+            URLQueryItem(name: "id", value: artistId),
+            URLQueryItem(name: "limit", value: "\(limit)"),
+            URLQueryItem(name: "include_groups", value: "album"),
+            URLQueryItem(name: "market", value: "from_token")
+        ]
+        
+        guard let finURL = component?.url else {
+            result(.failure(.invalidCompiledURL))
+            return
+        }
+        
+        var request = URLRequest(url: finURL)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        fetchResources(request: request) { (resultVal: Result<PagingObject<SimplifiedAlbum>, APIServiceError>) in
+            switch resultVal {
+            case .success(let pagingObj):
+                let albums = pagingObj.items
+                var albumNames = Set<String>()
+                var uniqueAlbums = [SociallyAlbum]()
+                for album in albums {
+                    if !albumNames.contains(album.name) {
+                        albumNames.insert(album.name)
+                        uniqueAlbums.append(SociallyAlbum(from: album))
+                    }
+                }
+                result(.success(uniqueAlbums))
             case .failure(let error):
                 result(.failure(error))
             }
