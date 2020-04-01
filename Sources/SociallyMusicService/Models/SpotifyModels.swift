@@ -58,11 +58,14 @@ struct SimplifiedAlbum: Codable {
     let artists: [SimplifiedArtist]
     let images: [SpotifyImage]?
     let name: String
+    let id: String
     let uri: String
 }
 
 struct SimplifiedArtist: Codable {
     let name: String
+    let uri: String
+    let id: String
 }
 
 struct SimplifiedTrack: Codable {
