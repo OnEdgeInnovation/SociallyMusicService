@@ -12,7 +12,7 @@ public struct ResponseRoot<T: Codable>: Codable {
     let data: [T]?
 }
 
-public typealias Track = Resource<TrackAttributes>
+public typealias AppleTrack = Resource<TrackAttributes>
 
 public struct TrackAttributes: Codable {
     let artistName: String
@@ -51,7 +51,10 @@ public struct PlaylistAttributes: Codable {
     let description: EditorialNotes?
     let name: String
     let artwork: Artwork?
-    let canEdit: Bool
+    let canEdit: Bool?
+    let curatorName: String?
+    let playParams: PlayParameters
+    
 }
 
 public struct EditorialNotes: Codable {
@@ -86,7 +89,7 @@ public struct AdditionalResource<AttributesType: Codable, RelationshipsType: Cod
 }
 public struct PlaylistRelationships: Codable {
     let curator: Relationship<Curator>?
-    let tracks: Relationship<Track>
+    let tracks: Relationship<AppleTrack>
 }
 
 public typealias Song = Resource<SongAttributes>
@@ -143,3 +146,69 @@ public struct AppleChart: Codable {
     let next: String?
 }
 
+public struct AppleAlbum: Codable {
+    let artistName: String
+    let artwork: Artwork?
+    let name: String
+    let playParams: PlayParameters?
+}
+
+public struct AppleAlbumRelationships: Codable {
+    let tracks: ResponseRoot<Resource<SongAttributes>>
+}
+
+
+public struct AppleSearchObject: Codable {
+    let playlists: ResponseRoot<Resource<PlaylistAttributes>>
+    let songs: ResponseRoot<Resource<SongAttributes>>
+    let artists: ResponseRoot<AdditionalResource<ArtistSearchAttributes, ArtistRelationships>>
+    let albums: ResponseRoot<Resource<AppleAlbum>>
+
+    var sociallyTracks: [SociallyTrack] {
+        return songs.data?.compactMap({SociallyTrack(from: $0.attributes)}) ?? []
+    }
+    
+    var sociallyAlbums: [SociallyAlbum] {
+        return albums.data?.compactMap({SociallyAlbum(from: $0 )}) ?? []
+    }
+    
+    var sociallyArtists: [SociallyArtist] {
+        return artists.data?.compactMap({SociallyArtist(from: $0 )}) ?? []
+    }
+    
+    var sociallyPlaylists: [SociallyPlaylist] {
+        return playlists.data?.compactMap({SociallyPlaylist(from: $0 )}) ?? []
+    }
+}
+
+struct AppleSearchRoot<T: Decodable>: Decodable {
+    let results: T
+}
+
+struct ArtistRelationships: Codable {
+    let albums: ResponseRoot<Resource<AppleAlbum>>
+}
+
+struct CatalogPlaylistAttributes: Codable {
+    let tracks: ResponseRoot<Resource<SongAttributes>>
+}
+
+
+struct ArtistSearchAttributes: Codable {
+    let url: String
+    let genreNames: [String]
+    let name: String
+}
+
+
+struct ArtistProfileSongsSearch: Codable {
+    let songs: ResponseRoot<AdditionalResource<SongAttributes, ArtistProfileSongSearchRelationships>>
+    
+    var sociallyTracks: [SociallyTrack] {
+        return songs.data?.compactMap({SociallyTrack(from: $0.attributes)}) ?? []
+    }
+}
+
+struct ArtistProfileSongSearchRelationships: Codable {
+    let artists: ResponseRoot<Resource<ArtistSearchAttributes>>
+}

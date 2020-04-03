@@ -27,4 +27,16 @@ public struct SociallyAlbum: Codable {
         self.albumId = album.id
         self.albumUri = album.uri
     }
+    init?(from resource: Resource<AppleAlbum>) {
+        guard let album = resource.attributes else { return nil }
+        // Spotify users play the album via URI, apple music users shuffle [song] and enqueue them
+        self.albumUri = ""
+        self.artist = SociallyArtist(name: album.artistName, id: "", imageURL: "")
+        self.name = album.name
+        if let urlStr = album.artwork?.url {
+            let url = urlStr.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
+            self.imageURL = URL(string: url)
+        }
+        self.albumId = resource.id
+    }
 }

@@ -26,6 +26,16 @@ public struct SociallyTrack: Codable {
         self.imageURL = imageURL
     }
     
+    public init?(from song: SongAttributes?) {
+        guard let song = song else { return nil }
+        self.album = song.albumName
+        self.artist = song.artistName
+        self.name = song.name
+        self.isrc = song.isrc ?? ""
+        self.context = song.playParams.id
+        self.imageURL = song.artwork.url.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
+    }
+    
     public init?(with data: [String: Any]) {
         guard let album = data["album"] as? String,
             let artist = data["artist"] as? String,
