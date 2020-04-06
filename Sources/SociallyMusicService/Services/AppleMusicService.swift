@@ -399,11 +399,9 @@ public class AppleMusicService: MusicService {
                     var imageURL = attributes.artwork.url
                     imageURL = imageURL.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
                     let sociallyArtist = SociallyArtist(name: attributes.artistName , id: attributes.playParams.id, imageURL: imageURL)
-                    if !ret.contains(where: {$0.name == sociallyArtist.name}) {
-                        ret.append(sociallyArtist)
-                    }
+                    ret.append(sociallyArtist)
                 }
-                
+                ret = ret.filter({!$0.name.contains("&")})
                 result(.success(ret))
             case .failure(let err):
                 result(.failure(err))
