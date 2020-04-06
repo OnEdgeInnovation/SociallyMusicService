@@ -14,14 +14,10 @@ class SociallyMusicServiceTests: XCTestCase {
     override func setUp() {
         classToTest.setToken(devToken: "", userToken: "")
     }
-
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
+    
     func testDecodableAppleLibraryTracks() {
         let expectation = XCTestExpectation(description: "Tracks are decodable from a playlist")
-        classToTest.getAllTracksForPlaylist(playlist: "") { (result) in
+        classToTest.getAllTracksForLibraryPlaylist(playlist: "p.1YeW3zpuRPkEpa") { (result) in
             switch result {
             case .success(let tracks):
                 print(tracks)
@@ -31,7 +27,7 @@ class SociallyMusicServiceTests: XCTestCase {
             }
         }
         
-        wait(for: [expectation], timeout: 5.0)
+        wait(for: [expectation], timeout: 30.0)
     }
     func testTopArtists() {
         let expectation = XCTestExpectation(description: "Heavy rotation history is decodable")
@@ -54,12 +50,69 @@ class SociallyMusicServiceTests: XCTestCase {
 
            wait(for: [expectation], timeout: 20.0)
        }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    
+    func testSearch() {
+        let expectation = XCTestExpectation(description: "Search objects are decodable")
+        
+        classToTest.search("drake") { (result) in
+            switch result {
+            case .success(let search):
+                print(search)
+                expectation.fulfill()
+            case .failure(let err):
+                print(err)
+            }
         }
+        wait(for: [expectation], timeout: 5.0)
     }
+    
+    func testTracksForAlbum() {
+        let expectation = XCTestExpectation(description: "album tracks are decodable")
+        
+        // Kygo singles album
+        classToTest.getAlbumTracks("1287220266") { (result) in
+            switch result {
+            case .success(let tracks):
+                print(tracks)
+                expectation.fulfill()
+            case .failure(let err):
+                print(err)
+            }
+        }
+        wait(for: [expectation], timeout: 5.0)
+    }
+    func testPlaylistTracks() {
+        let expectation = XCTestExpectation(description: "kygo playlist is decodable")
+        
+        // some top kygo singles playlist
+        classToTest.getCatalogPlaylistTracks("pl.bbb0d7b0c10b4078bbd5c3450faa31da") { (result) in
+            switch result {
+            case .success(let search):
+                print(search)
+                expectation.fulfill()
+            case .failure(let err):
+                print(err)
+            }
+        }
+        wait(for: [expectation], timeout: 5.0)
+    }
+    
+    func testGetTopArtistTracks() {
+        let kygoId =  "635806094"
+        let name = "Kygo"
+        
+        let expectation = XCTestExpectation(description: "valid tracks are returned")
+              classToTest.getArtistProfileTracks(name, artistId: kygoId) { (result) in
+                  switch result {
+                  case .success(let search):
+                      print(search)
+                      expectation.fulfill()
+                  case .failure(let err):
+                      print(err)
+                  }
+              }
+              wait(for: [expectation], timeout: 5.0)
+    }
+    
 
 }

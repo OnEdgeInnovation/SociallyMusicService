@@ -19,6 +19,18 @@ public struct SociallyArtist: Codable {
         self.imageURL = imageURL
     }
     
+    init?(from resource: AdditionalResource<ArtistSearchAttributes, ArtistRelationships>) {
+        guard let appleArtist = resource.attributes else { return nil }
+        self.name = appleArtist.name
+        self.id = resource.id
+        if let first = resource.relationships?.albums.data?.first, let url = first.attributes?.artwork?.url {
+            self.imageURL = url.replacingOccurrences(of: "{w}x{h}bb", with: "640x640bb")
+        } else {
+            self.imageURL = ""
+        }
+
+    }
+    
     //Initializer from JSON representation
     public init?(with data: [String: Any]) {
         guard let name = data["name"] as? String,

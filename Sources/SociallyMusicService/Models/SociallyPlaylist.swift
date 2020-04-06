@@ -30,7 +30,23 @@ public struct SociallyPlaylist: Codable {
         self.playlistUri = playlist.uri
     }
     
-    init(from playlist: ApplePlaylist) {
+    init?(from resource: Resource<PlaylistAttributes>) {
+        guard let attr = resource.attributes else { return nil }
+        self.name = attr.name
+        self.authorName = attr.curatorName ?? ""
+        self.description = attr.description?.short ?? ""
+        self.authorId = resource.id
+        
+        // apple decided to use cc instead of bb with playlist images, god knows why
+        if let urlstr = attr.artwork?.url.replacingOccurrences(of: "{w}x{h}cc", with: "640x640cc"), let url = URL(string: urlstr) {
+            self.imageURL = url
+        }
+        self.playlistId = attr.playParams.id
+        self.playlistUri = ""
+    }
+    
+    init?(from playlist: ApplePlaylist?) {
+        guard let playlist = playlist else { return nil }
         self.playlistId = playlist.id
         self.name = playlist.attributes?.name ?? ""
         self.authorName = ""

@@ -413,7 +413,7 @@ public class SpotifyService: MusicService {
                     self.search(query: query, type: "track", limit: 1) { (innerResultVal) in
                         switch innerResultVal {
                         case .success(let pagingObj):
-                            guard let track = pagingObj.sociallyTracks.first else {
+                            guard let track = pagingObj.tracks.first else {
                                 result(.failure(.noData))
                                 return
                             }
@@ -437,7 +437,7 @@ public class SpotifyService: MusicService {
     ///   - type: the types to include in the result
     ///   - limit: the number of items per type
     ///   - result: completion handler returning the context
-    public func search(query: String, type: String = "track,artist,playlist,album", limit: Int = 5, result: @escaping (Result<SearchPagingObject, APIServiceError>) -> Void) {
+    public func search(query: String, type: String = "track,artist,playlist,album", limit: Int = 5, result: @escaping (Result<SociallySearchObject, APIServiceError>) -> Void) {
         guard let token = token else {
             result(.failure(.tokenNilError))
             return
@@ -459,7 +459,7 @@ public class SpotifyService: MusicService {
         fetchResources(request: request) { (resultVal: Result<SearchPagingObject, APIServiceError>) in
             switch resultVal {
             case .success(let pagingObj):
-                result(.success(pagingObj))
+                result(.success(SociallySearchObject(from: pagingObj)))
             case .failure(let error):
                 result(.failure(error))
             }
