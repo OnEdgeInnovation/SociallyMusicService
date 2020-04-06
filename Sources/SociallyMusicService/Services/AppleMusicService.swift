@@ -38,7 +38,10 @@ public class AppleMusicService: MusicService {
         
         var component = URLComponents(string: baseURL.appendingPathComponent("me/library/playlists").absoluteString)
         
-        guard let url = component?.url else { return }
+        guard let url = component?.url else {
+            result(.failure(.invalidCompiledURL))
+            return
+        }
         component?.queryItems = [
             URLQueryItem(name: "limit", value: "100")
         ]
@@ -75,7 +78,10 @@ public class AppleMusicService: MusicService {
         
         let component = URLComponents(string: baseURL.appendingPathComponent("me/library/playlists/\(playlistId)/tracks").absoluteString)
         
-        guard let url = component?.url else { return }
+        guard let url = component?.url else {
+            result(.failure(.invalidCompiledURL))
+            return
+        }
         
         let body: [String: Any] = [
             "data": [["id": track, "type": "songs"]]]
@@ -111,7 +117,10 @@ public class AppleMusicService: MusicService {
             URLQueryItem(name: "include", value: "tracks")
         ]
         
-        guard let url = component?.url else { return }
+        guard let url = component?.url else {
+            result(.failure(.invalidCompiledURL))
+            return
+        }
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
@@ -145,7 +154,10 @@ public class AppleMusicService: MusicService {
             URLQueryItem(name: "types", value: "songs,artists")
             
         ]
-        guard let url = component?.url else { return }
+        guard let url = component?.url else {
+            result(.failure(.invalidCompiledURL))
+            return
+        }
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
@@ -177,7 +189,10 @@ public class AppleMusicService: MusicService {
             URLQueryItem(name: "include", value: "songs")
             
         ]
-        guard let url = component?.url else { return }
+        guard let url = component?.url else {
+            result(.failure(.invalidCompiledURL))
+            return
+        }
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
@@ -209,7 +224,11 @@ public class AppleMusicService: MusicService {
             URLQueryItem(name: "include", value: "albums")
         ]
         
-        guard let url = component?.url else { return }
+        guard let url = component?.url else {
+            result(.failure(.invalidCompiledURL))
+            return
+        }
+        
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
         
@@ -249,7 +268,10 @@ public class AppleMusicService: MusicService {
             URLQueryItem(name: "filter[isrc]", value: isrc)
         ]
         
-        guard let url = component?.url else { return }
+        guard let url = component?.url else {
+            result(.failure(.invalidCompiledURL))
+            return
+        }
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
@@ -281,7 +303,10 @@ public class AppleMusicService: MusicService {
         }
         let component = URLComponents(string: baseURL.appendingPathComponent("me/library/playlists/\(playlist)/tracks").absoluteString)
         
-        guard let url = component?.url else { return }
+        guard let url = component?.url else {
+            result(.failure(.invalidCompiledURL))
+            return
+        }
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
@@ -319,7 +344,10 @@ public class AppleMusicService: MusicService {
             URLQueryItem(name: "types", value: "artists,albums,playlists,songs")
             
         ]
-        guard let url = component?.url else { return }
+        guard let url = component?.url else {
+            result(.failure(.invalidCompiledURL))
+            return
+        }
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
@@ -349,13 +377,15 @@ public class AppleMusicService: MusicService {
             
         ]
         
-        guard let url = component?.url else { return }
+        guard let url = component?.url else {
+            result(.failure(.invalidCompiledURL))
+            return
+        }
         
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
         request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
-        print(request)
         fetchResources(request: request) { (resultVal: Result<ChartRoot, APIServiceError>) in
             switch resultVal {
             case .success(let res):
@@ -388,7 +418,11 @@ public class AppleMusicService: MusicService {
         }
         var component = URLComponents(string: baseURL.appendingPathComponent("me/history/heavy-rotation").absoluteString)
         
-        guard let url = component?.url else { return }
+        guard let url = component?.url else {
+            result(.failure(.invalidCompiledURL))
+            return
+        }
+        
         component?.queryItems = [
             URLQueryItem(name: "limit", value: "100")
         ]
@@ -438,13 +472,15 @@ public class AppleMusicService: MusicService {
             
         ]
         
-        guard let url = component?.url else { return }
+        guard let url = component?.url else {
+            result(.failure(.invalidCompiledURL))
+            return
+        }
         
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
         request.setValue(userToken, forHTTPHeaderField: "Music-User-Token")
-        print(request)
         fetchResources(request: request) { (resultVal: Result<ChartRoot, APIServiceError>) in
             switch resultVal {
             case .success(let res):
@@ -480,7 +516,10 @@ public class AppleMusicService: MusicService {
         let countryCode = "us"
         let component = URLComponents(string: baseURL.appendingPathComponent("catalog/\(countryCode)/songs/\(id)").absoluteString)
         
-        guard let url = component?.url else { return }
+        guard let url = component?.url else {
+            result(.failure(.invalidCompiledURL))
+            return
+        }
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
@@ -518,7 +557,10 @@ extension AppleMusicService {
             URLQueryItem(name: "ids", value: songIds.joined(separator: ","))
         ]
         
-        guard let url = component?.url else { return }
+        guard let url = component?.url else {
+            result(.failure(.invalidCompiledURL))
+            return
+        }
         
         var request = URLRequest(url: url)
         request.setValue("Bearer \(devToken)", forHTTPHeaderField: "Authorization")
